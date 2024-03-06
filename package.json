@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "@redi/nyc-boba",
   "version": "1.0.0",
   "description": "A library and toolset for automated collection and ingestion of the BYTES of the BIG APPLE (BOBA) datasets from NYC.",
