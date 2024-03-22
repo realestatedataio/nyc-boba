@@ -94,7 +94,7 @@ const Run = async () =>
     
     const mongoClient = new MongoClient
     (
-        "mongodb://" + process.env.REDI_API_MONGODB_URL,
+        "mongodb://" + process.env.REDI_MONGODB_URL,
         {
             "authSource": mongoCreds.authSource,
             "auth": {"username": mongoCreds.user, "password": mongoCreds.password},
