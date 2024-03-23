@@ -9,9 +9,15 @@ import minimist from "minimist";
 const argv = minimist(process.argv.slice(2));
 
 
-const ProcessCsv = async (file, collection) =>
+const ProcessCsv = async (mapperName, file, collection, version) =>
 {
-    const padAddressMapper = new RediNycBoba.PadAddressMapper();
+    if (RediNycBoba.hasOwnProperty(mapperName) === false || !(RediNycBoba[mapperName]))
+    {
+        console.error("ERROR: Unrecognized mapper \"" + mapperName + "\"");
+        return;
+    }
+
+    const mapper = new RediNycBoba[mapperName]();
 
     const GeneratorFunc = (resolve, reject) =>
     {
@@ -27,8 +33,9 @@ const ProcessCsv = async (file, collection) =>
             count = count + 1;
             process.stdout.write("\rProcessed " + count);
 
-            let pa = await padAddressMapper.FromCsv(row);            
-            pa = pa.ToJson();
+            let r = await mapper.FromCsv(row);            
+            r.version = version;
+            r = r.ToJson();
 
             try
             {
@@ -53,6 +60,9 @@ const ProcessCsv = async (file, collection) =>
 
 const Run = async () =>
 {
+    let argMapper = argv.hasOwnProperty("mapper") ? argv.mapper : null;
+    argMapper = argMapper && argMapper !== "" ? argMapper : null;
+
     let argDb = argv.hasOwnProperty("db") ? argv.db : null;
     argDb = argDb && argDb !== "" ? argDb : null;
 
@@ -64,6 +74,12 @@ const Run = async () =>
 
     let argFile = argv.hasOwnProperty("file") ? argv.file : null;
     argFile = argFile && argFile !== "" ? argFile : null;
+
+    if (argMapper === null)
+    {
+        console.log("Required argument \"mapper\" missing");
+        return;
+    }
 
     if (argDb === null)
     {
@@ -107,7 +123,7 @@ const Run = async () =>
 
     let collection = mongoClient.db(argDb).collection(argCollection);
 
-    await ProcessCsv(argFile, collection, argVersion);
+    await ProcessCsv(argMapper, argFile, collection, argVersion);
 };
 
 Run();

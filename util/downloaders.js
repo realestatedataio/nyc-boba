@@ -1,12 +1,32 @@
 import { default as RediNycBoba } from "../index.js";
+import minimist from "minimist";
 
 
+
+const argv = minimist(process.argv.slice(2));
 
 
 const Run = async () =>
 {
-    console.log(RediNycBoba);
+    let argDownloader = argv.hasOwnProperty("downloader") ? argv.downloader : null;
+    argDownloader = argDownloader && argDownloader !== "" ? argDownloader : null;
 
+    if (argDownloader === null)
+    {
+        console.error("Missing arg \"downloader\" must be provided");
+        return;
+    }
+
+    if (RediNycBoba.hasOwnProperty(argDownloader) === false || !(RediNycBoba[argDownloader]))
+    {
+        console.error("ERROR: Unknown downloader \"" + argDownloader + "\"");
+        return;
+    }
+
+    let downloader = new RediNycBoba[argDownloader]();
+    let file = await downloader.Run();
+
+    /*
     let padDownloader = new RediNycBoba.PadDownloader();
     let padFile = await padDownloader.Run();
     console.log("PAD downloaded to: " + padFile);
@@ -22,6 +42,7 @@ const Run = async () =>
     let sndDownloader = new RediNycBoba.SndDownloader();
     let sndFile = await sndDownloader.Run();
     console.log("SND downloaded to: " + sndFile);
+    */
 };
 
 Run();
