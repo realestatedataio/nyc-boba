@@ -39,7 +39,7 @@ const ProcessCsv = async (mapperName, file, collection, version) =>
 
             try
             {
-                await collection.insertOne(pa);
+                await collection.insertOne(r);
             }
 
             catch (e)
