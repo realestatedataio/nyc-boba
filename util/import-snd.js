@@ -34,38 +34,26 @@ const ProcessFile = async (file, sndCollection, sndFtCollection, version) =>
             //console.log("Processed " + count);
             //process.stdout.write("\rProcessed " + count);
 
-            if (line[50] === "S")
+            if (count === 1)
             {
-                let s = await sndFtMapper.FromFile(line);
-                s.version = version;
-                s = s.ToJson();
-
-                try
-                {
-                    insertPromises.push(sndFtCollection.insertOne(s));
-                }
-
-                catch (e)
-                {
-                    console.log(e);
-                }
+                return;
             }
 
-            else if (count > 1)
+            try
             {
-                let s = await sndMapper.FromFile(line);
+                let mapper = line[50] === "S" ? sndFtMapper : sndMapper;
+                let collection = line[50] === "S" ? sndFtCollection : sndCollection;
+
+                let s = await mapper.FromFile(line);
                 s.version = version;
                 s = s.ToJson();
 
-                try
-                {
-                    insertPromises.push(sndCollection.insertOne(s));
-                }
+                insertPromises.push(collection.insertOne(s));
+            }
 
-                catch (e)
-                {
-                    console.error(e);
-                }
+            catch (e)
+            {
+                console.error(e);
             }
 
             if (insertPromises.length >= 500)
