@@ -37,6 +37,8 @@ const ProcessFile = async (file, sndCollection, sndFtCollection, version) =>
             if (line[50] === "S")
             {
                 let s = await sndFtMapper.FromFile(line);
+                s.version = version;
+                s = s.ToJson();
 
                 try
                 {
@@ -52,6 +54,8 @@ const ProcessFile = async (file, sndCollection, sndFtCollection, version) =>
             else if (count > 1)
             {
                 let s = await sndMapper.FromFile(line);
+                s.version = version;
+                s = s.ToJson();
 
                 try
                 {
