@@ -4,8 +4,12 @@ import { default as PlutoDownloader } from "./lib/downloader/pluto/index.js";
 import { default as MapPlutoDownloader } from "./lib/downloader/mappluto/index.js";
 
 import { PadAddress, PadBbl } from "./lib/model/pad/index.js";
+import { Snd, SndFrontTruncated } from "./lib/model/snd/index.js";
+import { Pluto } from "./lib/model/pluto/index.js";
 
 import { PadAddressMapper, PadBblMapper } from "./lib/mapper/pad/index.js";
+import { SndMapper, SndFrontTruncatedMapper } from "./lib/mapper/snd/index.js";
+import { PlutoMapper } from "./lib/mapper/pluto/index.js";
 
 
 
@@ -20,8 +24,14 @@ export default {
     // Models.
     PadAddress,
     PadBbl,
+    Snd,
+    SndFrontTruncated,
+    Pluto,
 
     // Mappers.
     PadAddressMapper,
-    PadBblMapper
+    PadBblMapper,
+    SndMapper,
+    SndFrontTruncatedMapper,
+    PlutoMapper
 };

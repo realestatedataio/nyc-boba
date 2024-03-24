@@ -124,6 +124,8 @@ const Run = async () =>
     let collection = mongoClient.db(argDb).collection(argCollection);
 
     await ProcessCsv(argMapper, argFile, collection, argVersion);
+
+    await mongoClient.close();
 };
 
 Run();
