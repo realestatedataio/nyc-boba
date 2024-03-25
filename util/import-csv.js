@@ -115,7 +115,7 @@ const Run = async () =>
             "authSource": mongoCreds.authSource,
             "auth": {"username": mongoCreds.user, "password": mongoCreds.password},
             "useUnifiedTopology": true,
-            "socketTimeoutMS": 400000
+            "socketTimeoutMS": 500000
         }
     );
 
