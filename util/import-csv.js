@@ -44,13 +44,19 @@ const ProcessCsv = async (mapperName, file, collection, version) =>
 
             catch (e)
             {
+                console.log("FAILED TO INSERT");
                 console.log(e);
             }
 
             ws.resume();
         });
 
-        ws.on("end", () => { console.log(""); console.log("CLOSING STREAM"); resolve(); });
+        ws.on("end", () => 
+        {
+            console.log(""); 
+            console.log("CLOSING STREAM"); 
+            resolve(); 
+        });
 
         rs.pipe(ws);
     };
