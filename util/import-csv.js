@@ -126,7 +126,7 @@ const Run = async () =>
     await ProcessCsv(argMapper, argFile, collection, argVersion);
 
     console.log("DONE");
-    //await mongoClient.close();
+    await mongoClient.close();
 };
 
 Run();
