@@ -50,7 +50,7 @@ const ProcessCsv = async (mapperName, file, collection, version) =>
             ws.resume();
         });
 
-        ws.on("end", () => { console.log(""); resolve(); });
+        ws.on("end", () => { console.log(""); console.log("CLOSING STREAM"); resolve(); });
 
         rs.pipe(ws);
     };
@@ -125,7 +125,8 @@ const Run = async () =>
 
     await ProcessCsv(argMapper, argFile, collection, argVersion);
 
-    await mongoClient.close();
+    console.log("DONE");
+    //await mongoClient.close();
 };
 
 Run();
