@@ -5,18 +5,30 @@ import minimist from "minimist";
 
 
 
-const CreateBuilding = async (buildingCollection, boro, block, lot, address, bin) =>
+const CreateBuilding = async (buildingCollection, building) =>
 {
-    let building = 
-    {
-        "boro": boro,
-        "block": block,
-        "lot": lot,
-        "address": address,
-        "bin": bin
-    };
+    let result = null;
 
-    let result = await buildingCollection.insertOne(building);
+    try
+    {
+        let exists = await buildingCollection.findOne({"bin": building.bin});
+
+        if (exists)
+        {
+            result = await buildingCollection.updateOne({"bin": building.bin}, {"$push": {"addresses": building.addresses}});
+        }
+
+        else
+        {
+            result = await buildingCollection.insertOne(building);
+        }
+    }
+
+    catch (e)
+    {
+        console.log(e);
+    }
+
     return result;
 };
 
@@ -233,7 +245,7 @@ const Run = async () =>
     let padAddressCursor = await padAddressCollection.find
     ({
         //"lhnd": {"$regex": "^([0-9]+)([a-zA-Z])$"}
-        "lhnd": {"$regex": "^([0-9]+)-([0-9]+)$"}
+        //"lhnd": {"$regex": "^([0-9]+)-([0-9]+)$"}
     });
 
     let padAddressCount = 0;
@@ -255,11 +267,7 @@ const Run = async () =>
         let sc5 = pa.sc5;
         let lowAddr = pa.lhnd + " " + pa.stname;
 
-        //console.log(pa.lhnd + " and " + pa.hhnd + " with parity " + pa.lcontpar);
-        
         let houseNumbers = BuildHouseNumbers(pa.lhnd, pa.hhnd, pa.lcontpar);
-
-        //console.log(houseNumbers);
 
         if (houseNumbers === null || (houseNumbers.length && houseNumbers[0].length === 0))
         {
@@ -268,30 +276,40 @@ const Run = async () =>
 
         let sndCursor = await sndCollection.find({"boro": scboro, "sc5": sc5});
         let snds = await sndCursor.toArray();
-
         let addrPromises = [];
+
+        let building = 
+        {
+            "bin": pa.bin,
+            "boro": pa.boro,
+            "block": pa.block,
+            "lot": pa.lot,
+            "addresses": []
+        };
+
+        if (building.bin && building.bin.match(/^[1-5]000000$/))
+        {
+            continue;
+        }
 
         for (let i = 0; i < snds.length; i++)
         {
             for (let j = 0; j < houseNumbers.length; j++)
             {
                 let addr = houseNumbers[j] + " " + snds[i].fullstname;
-                console.log(addr + " and " + snds[i].fullstname + " and " + pa.bin);
-
-                try
-                {
-                    addrPromises.push(CreateBuilding(buildingCollection, pa.boro, pa.block, pa.lot, addr, pa.bin));
-                }
-
-                catch (e)
-                {
-                    console.log(e);
-                }
+                building.addresses.push({"address": addr, "sc5": sc5});
             }
         }
+    }
 
-        await Promise.allSettled(addrPromises);
-        addrPromises = [];
+    try
+    {
+        await CreateBuilding(buildingCollection, building);
+    }
+
+    catch (e)
+    {
+        console.log(e);
     }
 
     await mongoClient.close();
