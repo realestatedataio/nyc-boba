@@ -15,7 +15,11 @@ const CreateBuilding = async (buildingCollection, building) =>
 
         if (exists)
         {
-            result = await buildingCollection.updateOne({"bin": building.bin}, {"$push": {"addresses": building.addresses}});
+            result = await buildingCollection.updateOne
+            (
+                {"bin": building.bin}, 
+                {"$set": {"addresses": exists.addresses.concat(building.addresses)}}
+            );
         }
 
         else
@@ -271,7 +275,7 @@ const Run = async () =>
 
         if (houseNumbers === null || (houseNumbers.length && houseNumbers[0].length === 0))
         {
-            console.log(pa.lhnd + " and " + pa.hhnd + " with parity " + pa.lcontpar);
+            //console.log(pa.lhnd + " and " + pa.hhnd + " with parity " + pa.lcontpar);
         }
 
         let sndCursor = await sndCollection.find({"boro": scboro, "sc5": sc5});
@@ -297,19 +301,26 @@ const Run = async () =>
             for (let j = 0; j < houseNumbers.length; j++)
             {
                 let addr = houseNumbers[j] + " " + snds[i].fullstname;
+                addr = addr.replace(/\s+/g, " ").trim();
+
                 building.addresses.push({"address": addr, "sc5": sc5});
             }
+
+            if (houseNumbers === null || houseNumbers.length === 0)
+            {
+                building.addresses.push({"address": snds[i].fullstname, "sc5": sc5});
+            }
         }
-    }
 
-    try
-    {
-        await CreateBuilding(buildingCollection, building);
-    }
+        try
+        {
+            await CreateBuilding(buildingCollection, building);
+        }
 
-    catch (e)
-    {
-        console.log(e);
+        catch (e)
+        {
+            console.log(e);
+        }
     }
 
     await mongoClient.close();
