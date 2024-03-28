@@ -333,7 +333,7 @@ const Run = async () =>
 
         padPromises.push(ProcessPadAddress(pa));
 
-        if (padAddresses.length >= 100)
+        if (padPromises.length >= 100)
         {
             try
             {
