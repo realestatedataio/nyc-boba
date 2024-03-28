@@ -254,6 +254,8 @@ const Run = async () =>
 
     let padAddressCount = 0;
 
+    let buildingPromises = [];
+
     while (1)
     {
         let pa = await padAddressCursor.next();
@@ -312,14 +314,35 @@ const Run = async () =>
             }
         }
 
+        buildingPromises.push(CreateBuilding(buildingCollection, building));
+
+        if (buildingPromises.length >= 100)
+        {
+            try
+            {
+                await Promise.allSettled(buildingPromises);
+                buildingPromises = [];
+                //await CreateBuilding(buildingCollection, building);
+            }
+
+            catch (e)
+            {
+                console.error(e);
+            }
+        }
+    }
+
+    if (buildingPromises.length)
+    {
         try
         {
-            await CreateBuilding(buildingCollection, building);
+            await Promise.allSettled(buildingPromises);
+            buildingPromises = [];
         }
 
         catch (e)
         {
-            console.log(e);
+            console.error(e);
         }
     }
 
