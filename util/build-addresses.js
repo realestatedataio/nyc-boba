@@ -4,6 +4,11 @@ import { MongoClient, ObjectId as MongoObjectId } from "mongodb";
 import minimist from "minimist";
 
 
+let padBblCollection = null;
+let padAddressCollection = null;
+let sndCollection = null;
+let sndFtCollection = null;
+let buildingCollection = null;
 
 const CreateBuilding = async (buildingCollection, building) =>
 {
@@ -34,6 +39,64 @@ const CreateBuilding = async (buildingCollection, building) =>
     }
 
     return result;
+};
+
+const ProcessPadAddress = async (pa) =>
+{
+    let bbl = pa.boro + pa.block + pa.lot;
+    let scboro = pa.scboro;
+    let sc5 = pa.sc5;
+    let lowAddr = pa.lhnd + " " + pa.stname;
+
+    let houseNumbers = BuildHouseNumbers(pa.lhnd, pa.hhnd, pa.lcontpar);
+
+    if (houseNumbers === null || (houseNumbers.length && houseNumbers[0].length === 0))
+    {
+        //console.log(pa.lhnd + " and " + pa.hhnd + " with parity " + pa.lcontpar);
+    }
+
+    let sndCursor = await sndCollection.find({"boro": scboro, "sc5": sc5});
+    let snds = await sndCursor.toArray();
+
+    let building = 
+    {
+        "bin": pa.bin,
+        "boro": pa.boro,
+        "block": pa.block,
+        "lot": pa.lot,
+        "addresses": []
+    };
+
+    if (building.bin && building.bin.match(/^[1-5]000000$/))
+    {
+        return;
+    }
+
+    for (let i = 0; i < snds.length; i++)
+    {
+        for (let j = 0; j < houseNumbers.length; j++)
+        {
+            let addr = houseNumbers[j] + " " + snds[i].fullstname;
+            addr = addr.replace(/\s+/g, " ").trim();
+
+            building.addresses.push({"address": addr, "sc5": sc5});
+        }
+
+        if (houseNumbers === null || houseNumbers.length === 0)
+        {
+            building.addresses.push({"address": snds[i].fullstname, "sc5": sc5});
+        }
+    }
+
+    try
+    {
+        await CreateBuilding(buildingCollection, building);
+    }
+
+    catch (e)
+    {
+        console.error(e);
+    }
 };
 
 const BuildNumericHouseNumbers = (low, high, parity, pattern) =>
@@ -240,11 +303,11 @@ const Run = async () =>
 
     let db = mongoClient.db("redi");
 
-    let padBblCollection = db.collection("nyc-boba-pad-bbl");
-    let padAddressCollection = db.collection("nyc-boba-pad-address");
-    let sndCollection = db.collection("nyc-boba-snd");
-    let sndFtCollection = db.collection("nyc-boba-snd-ft");
-    let buildingCollection = db.collection("nyc-boba-buildings");
+    padBblCollection = db.collection("nyc-boba-pad-bbl");
+    padAddressCollection = db.collection("nyc-boba-pad-address");
+    sndCollection = db.collection("nyc-boba-snd");
+    sndFtCollection = db.collection("nyc-boba-snd-ft");
+    buildingCollection = db.collection("nyc-boba-buildings");
 
     let padAddressCursor = await padAddressCollection.find
     ({
@@ -254,7 +317,7 @@ const Run = async () =>
 
     let padAddressCount = 0;
 
-    let buildingPromises = [];
+    let padPromises = [];
 
     while (1)
     {
@@ -268,6 +331,23 @@ const Run = async () =>
         padAddressCount = padAddressCount + 1;
         console.log("Processed " + padAddressCount + " pad addresses");
 
+        padPromises.push(ProcessPadAddress(pa));
+
+        if (padAddresses.length >= 100)
+        {
+            try
+            {
+                await Promise.allSettled(padPromises);
+                padPromises = [];
+            }
+
+            catch (e)
+            {
+                console.error(e);
+            }
+        }
+
+        /*
         let bbl = pa.boro + pa.block + pa.lot;
         let scboro = pa.scboro;
         let sc5 = pa.sc5;
@@ -282,7 +362,6 @@ const Run = async () =>
 
         let sndCursor = await sndCollection.find({"boro": scboro, "sc5": sc5});
         let snds = await sndCursor.toArray();
-        let addrPromises = [];
 
         let building = 
         {
@@ -330,8 +409,24 @@ const Run = async () =>
                 console.error(e);
             }
         }
+        */
     }
 
+    if (padPromises.length)
+    {
+        try
+        {
+            await Promise.allSettled(padPromises);
+            padPromises = [];
+        }
+
+        catch (e)
+        {
+            console.error(e);
+        }
+    }
+
+    /*
     if (buildingPromises.length)
     {
         try
@@ -345,6 +440,7 @@ const Run = async () =>
             console.error(e);
         }
     }
+    */
 
     await mongoClient.close();
 };
