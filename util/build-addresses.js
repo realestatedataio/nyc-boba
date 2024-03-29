@@ -82,20 +82,24 @@ const ProcessPadAddress = async (pa) =>
             let addr = houseNumbers[j] + " " + snds[i].fullstname;
             addr = addr.replace(/\s+/g, " ").trim();
 
+            let parsedAddr = await rediAddressParser.CleanAddress(addr);
+
             building.addresses.push
             ({
                 "address": addr, 
-                "cleanAddress": await rediAddressParser.CleanAddress(addr),
+                "cleanAddress": parsedAddr ? parsedAddr.cleanAddress : null,
                 "sc5": sc5
             });
         }
 
         if (houseNumbers === null || houseNumbers.length === 0)
         {
+            let parsedAddr = await rediAddressParser.CleanAddress(snds[i].fullstname);
+
             building.addresses.push
             ({
                 "address": snds[i].fullstname, 
-                "cleanAddress": await rediAddressParser.CleanAddress(snds[i].fullstname),
+                "cleanAddress": parsedAddr ? parsedAddr.cleanAddress : null,
                 "sc5": sc5
             });
         }
