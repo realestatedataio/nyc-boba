@@ -2,7 +2,10 @@ import fs from "fs";
 import { default as RediNycBoba } from "../index.js";
 import { MongoClient, ObjectId as MongoObjectId } from "mongodb";
 import minimist from "minimist";
+import { default as Redi } from "realestatedata";
 
+
+const rediAddressParser = new Redi.AddressParser();
 
 let padBblCollection = null;
 let padAddressCollection = null;
@@ -79,12 +82,22 @@ const ProcessPadAddress = async (pa) =>
             let addr = houseNumbers[j] + " " + snds[i].fullstname;
             addr = addr.replace(/\s+/g, " ").trim();
 
-            building.addresses.push({"address": addr, "sc5": sc5});
+            building.addresses.push
+            ({
+                "address": addr, 
+                "cleanAddress": await rediAddressParser.CleanAddress(addr),
+                "sc5": sc5
+            });
         }
 
         if (houseNumbers === null || houseNumbers.length === 0)
         {
-            building.addresses.push({"address": snds[i].fullstname, "sc5": sc5});
+            building.addresses.push
+            ({
+                "address": snds[i].fullstname, 
+                "cleanAddress": await rediAddressParser.CleanAddress(snds[i].fullstname),
+                "sc5": sc5
+            });
         }
     }
 
