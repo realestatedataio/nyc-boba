@@ -5,6 +5,8 @@ import minimist from "minimist";
 import { default as Redi } from "realestatedata";
 
 
+const argv = minimist(process.argv.slice(2));
+
 const rediAddressParser = new Redi.AddressParser();
 
 let padBblCollection = null;
@@ -23,10 +25,34 @@ const CreateBuilding = async (buildingCollection, building) =>
 
         if (exists)
         {
+            let missingAddresses = [];
+
+            for (let i = 0; i < building.addresses.length; i++)
+            {
+                let ba = building.addresses[i];
+                let addressExists = false;
+
+                for (let j = 0; j < exists.addresses.length; j++)
+                {
+                    let ea = exists.addresses[j];
+
+                    if (ba.cleanAddress === ea.cleanAddress)
+                    {
+                        addressExists = true;
+                        break;
+                    }
+                }
+
+                if (addressExists === false)
+                {
+                    missingAddresses.push(ba);
+                }
+            }
+
             result = await buildingCollection.updateOne
             (
                 {"bin": building.bin}, 
-                {"$set": {"addresses": exists.addresses.concat(building.addresses)}}
+                {"$set": {"addresses": exists.addresses.concat(missingAddresses)}}
             );
         }
 
