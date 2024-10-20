@@ -11,7 +11,7 @@ class PadAddressMapper
     };
 
 
-    async FromCsv(d)
+    async FromCsv(d: any): Promise<PadAddress>
     {
         let p = new PadAddress();
 
@@ -82,7 +82,7 @@ class PadBblMapper
     };
 
 
-    async FromCsv(d)
+    async FromCsv(d: any): Promise<PadBbl>
     {
         let p = new PadBbl();
     

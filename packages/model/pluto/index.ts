@@ -1,97 +1,97 @@
 class Pluto
 {
-    _version = null;
-    _borough = null;
-    _block = null;
-    _lot = null;
-    _cd = null;
-    _bct2020 = null;
-    _bctcb2020 = null;
-    _ct2010 = null;
-    _cb2010 = null;
-    _schooldist = null;
-    _council = null;
-    _zipcode = null;
-    _firecomp = null;
-    _policeprct = null;
-    _healthcenterdistrict = null;
-    _healtharea = null;
-    _sanitboro = null;
-    _sanitdistrict = null;
-    _sanitsub = null;
-    _address = null;
-    _zonedist1 = null;
-    _zonedist2 = null;
-    _zonedist3 = null;
-    _zonedist4 = null;
-    _overlay1 = null;
-    _overlay2 = null;
-    _spdist1 = null;
-    _spdist2 = null;
-    _spdist3 = null;
-    _ltdheight = null;
-    _splitzone = null;
-    _bldgclass = null;
-    _landuse = null;
-    _easements = null;
-    _ownertype = null;
-    _ownername = null;
-    _lotarea = null;
-    _bldgarea = null;
-    _comarea = null;
-    _resarea = null;
-    _officearea = null;
-    _retailarea = null;
-    _garagearea = null;
-    _strgearea = null;
-    _factryarea = null;
-    _otherarea = null;
-    _areasource = null;
-    _numbldgs = null;
-    _numfloors = null;
-    _unitsres = null;
-    _unitstotal = null;
-    _lotfront = null;
-    _lotdepth = null;
-    _bldgfront = null;
-    _bldgdepth = null;
-    _ext = null;
-    _proxcode = null;
-    _irrlotcode = null;
-    _lottype = null;
-    _bsmtcode = null;
-    _assessland = null;
-    _assesstot = null;
-    _exempttot = null;
-    _yearbuilt = null;
-    _yearalter1 = null;
-    _yearalter2 = null;
-    _histdist = null;
-    _landmark = null;
-    _builtfar = null;
-    _residfar = null;
-    _commfar = null;
-    _facilfar = null;
-    _borocode = null;
-    _bbl = null;
-    _condono = null;
-    _tract2010 = null;
-    _xcoord = null;
-    _ycoord = null;
-    _zonemap = null;
-    _zmcode = null;
-    _sanborn = null;
-    _taxmap = null;
-    _edesignum = null;
-    _appbbl = null;
-    _appdate = null;
-    _plutomapid = null;
-    _firm07flag = null;
-    _pfirm15flag = null;
-    _dcpedited = null;
-    _latitude = null;
-    _longitude = null;
-    _notes = null;
+    _version: string = null;
+    _borough: string = null;
+    _block: string = null;
+    _lot: string = null;
+    _cd: string = null;
+    _bct2020: string = null;
+    _bctcb2020: string = null;
+    _ct2010: string = null;
+    _cb2010: string = null;
+    _schooldist: string = null;
+    _council: string = null;
+    _zipcode: string = null;
+    _firecomp: string = null;
+    _policeprct: string = null;
+    _healthcenterdistrict: string = null;
+    _healtharea: string = null;
+    _sanitboro: string = null;
+    _sanitdistrict: string = null;
+    _sanitsub: string = null;
+    _address: string = null;
+    _zonedist1: string = null;
+    _zonedist2: string = null;
+    _zonedist3: string = null;
+    _zonedist4: string = null;
+    _overlay1: string = null;
+    _overlay2: string = null;
+    _spdist1: string = null;
+    _spdist2: string = null;
+    _spdist3: string = null;
+    _ltdheight: string = null;
+    _splitzone: string = null;
+    _bldgclass: string = null;
+    _landuse: string = null;
+    _easements: string = null;
+    _ownertype: string = null;
+    _ownername: string = null;
+    _lotarea: number = null;
+    _bldgarea: number = null;
+    _comarea: number = null;
+    _resarea: number = null;
+    _officearea: number = null;
+    _retailarea: number = null;
+    _garagearea: number = null;
+    _strgearea: number = null;
+    _factryarea: number = null;
+    _otherarea: number = null;
+    _areasource: string = null;
+    _numbldgs: number = null;
+    _numfloors: number = null;
+    _unitsres: number = null;
+    _unitstotal: number = null;
+    _lotfront: number = null;
+    _lotdepth: number = null;
+    _bldgfront: number = null;
+    _bldgdepth: number = null;
+    _ext: string = null;
+    _proxcode: string = null;
+    _irrlotcode: string = null;
+    _lottype: string = null;
+    _bsmtcode: string = null;
+    _assessland: number = null;
+    _assesstot: number = null;
+    _exempttot: number = null;
+    _yearbuilt: number = null;
+    _yearalter1: number = null;
+    _yearalter2: number = null;
+    _histdist: string = null;
+    _landmark: string = null;
+    _builtfar: number = null;
+    _residfar: number = null;
+    _commfar: number = null;
+    _facilfar: number = null;
+    _borocode: string = null;
+    _bbl: string = null;
+    _condono: string = null;
+    _tract2010: string = null;
+    _xcoord: number = null;
+    _ycoord: number = null;
+    _zonemap: string = null;
+    _zmcode: string = null;
+    _sanborn: string = null;
+    _taxmap: string = null;
+    _edesignum: string = null;
+    _appbbl: string = null;
+    _appdate: string = null;
+    _plutomapid: string = null;
+    _firm07flag: string = null;
+    _pfirm15flag: string = null;
+    _dcpedited: string = null;
+    _latitude: number = null;
+    _longitude: number = null;
+    _notes: string = null;
 
 
     constructor()
@@ -205,7 +205,7 @@ class Pluto
     /* Misc */
     /********/
 
-    _StringClean(v)
+    _StringClean(v: string): string
     {
         return v ? v.replace(/\s+/g, " ").trim() : null;
     };
@@ -216,462 +216,462 @@ class Pluto
     /* Setters & Getters */
     /*********************/
 
-    set version(v)
+    set version(v: string)
     {
         this._version = v;
     };
 
-    get version()
+    get version(): string
     {
         return this._version;
     };
 
-    set borough(v)
+    set borough(v: string)
     {
         this._borough = this._StringClean(v);
     };
 
-    get borough()
+    get borough(): string
     {
         return this._borough;
     };
 
-    set block(v)
+    set block(v: string)
     {
         this._block = this._StringClean(v);
     };
 
-    get block()
+    get block(): string
     {
         return this._block;
     };
 
-    set lot(v)
+    set lot(v: string)
     {
         this._lot = this._StringClean(v);
     };
 
-    get lot()
+    get lot(): string
     {
         return this._lot;
     };
 
-    set cd(v)
+    set cd(v: string)
     {
         this._cd = this._StringClean(v);
     };
 
-    get cd()
+    get cd(): string
     {
         return this._cd;
     };
 
-    set bct2020(v)
+    set bct2020(v: string)
     {
         this._bct2020 = this._StringClean(v);
     };
 
-    get bct2020()
+    get bct2020(): string
     {
         return this._bct2020;
     };
 
-    set bctcb2020(v)
+    set bctcb2020(v: string)
     {
         this._bctcb2020 = this._StringClean(v);
     };
 
-    get bctcb2020()
+    get bctcb2020(): string
     {
         return this._bctcb2020;
     };
 
-    set ct2010(v)
+    set ct2010(v: string)
     {
         this._ct2010 = this._StringClean(v);
     };
 
-    get ct2010()
+    get ct2010(): string
     {
         return this._ct2010;
     };
 
-    set cb2010(v)
+    set cb2010(v: string)
     {
         this._cb2010 = this._StringClean(v);
     };
 
-    get cb2010()
+    get cb2010(): string
     {
         return this._cb2010;
     };
 
-    set schooldist(v)
+    set schooldist(v: string)
     {
         this._schooldist = this._StringClean(v);
     };
 
-    get schooldist()
+    get schooldist(): string
     {
         return this._schooldist;
     };
 
-    set council(v)
+    set council(v: string)
     {
         this._council = this._StringClean(v);
     };
 
-    get council()
+    get council(): string
     {
         return this._council;
     };
 
-    set zipcode(v)
+    set zipcode(v: string)
     {
         this._zipcode = this._StringClean(v);
     };
 
-    get zipcode()
+    get zipcode(): string
     {
         return this._zipcode;
     };
 
-    set firecomp(v)
+    set firecomp(v: string)
     {
         this._firecomp = this._StringClean(v);
     };
 
-    get firecomp()
+    get firecomp(): string
     {
         return this._firecomp;
     };
 
-    set policeprct(v)
+    set policeprct(v: string)
     {
         this._policeprct = this._StringClean(v);
     };
 
-    get policeprct()
+    get policeprct(): string
     {
         return this._policeprct;
     };
 
-    set healthcenterdistrict(v)
+    set healthcenterdistrict(v: string)
     {
         this._healthcenterdistrict = this._StringClean(v);
     };
 
-    get healthcenterdistrict()
+    get healthcenterdistrict(): string
     {
         return this._healthcenterdistrict;
     };
 
-    set healtharea(v)
+    set healtharea(v: string)
     {
         this._healtharea = this._StringClean(v);
     };
 
-    get healtharea()
+    get healtharea(): string
     {
         return this._healtharea;
     };
 
-    set sanitboro(v)
+    set sanitboro(v: string)
     {
         this._sanitboro = this._StringClean(v);
     };
 
-    get sanitboro()
+    get sanitboro(): string
     {
         return this._sanitboro;
     };
 
-    set sanitdistrict(v)
+    set sanitdistrict(v: string)
     {
         this._sanitdistrict = this._StringClean(v);
     };
 
-    get sanitdistrict()
+    get sanitdistrict(): string
     {
         return this._sanitdistrict;
     };
 
-    set sanitsub(v)
+    set sanitsub(v: string)
     {
         this._sanitsub = this._StringClean(v);
     };
 
-    get sanitsub()
+    get sanitsub(): string
     {
         return this._sanitsub;
     };
 
-    set address(v)
+    set address(v: string)
     {
         this._address = this._StringClean(v);
     };
 
-    get address()
+    get address(): string
     {
         return this._address;
     };
 
-    set zonedist1(v)
+    set zonedist1(v: string)
     {
         this._zonedist1 = this._StringClean(v);
     };
 
-    get zonedist1()
+    get zonedist1(): string
     {
         return this._zonedist1;
     };
 
-    set zonedist2(v)
+    set zonedist2(v: string)
     {
         this._zonedist2 = this._StringClean(v);
     };
 
-    get zonedist2()
+    get zonedist2(): string
     {
         return this._zonedist2;
     };
 
-    set zonedist3(v)
+    set zonedist3(v: string)
     {
         this._zonedist3 = this._StringClean(v);
     };
 
-    get zonedist3()
+    get zonedist3(): string
     {
         return this._zonedist3;
     };
 
-    set zonedist4(v)
+    set zonedist4(v: string)
     {
         this._zonedist4 = this._StringClean(v);
     };
 
-    get zonedist4()
+    get zonedist4(): string
     {
         return this._zonedist4;
     };
 
-    set overlay1(v)
+    set overlay1(v: string)
     {
         this._overlay1 = this._StringClean(v);
     };
 
-    get overlay1()
+    get overlay1(): string
     {
         return this._overlay1;
     };
 
-    set overlay2(v)
+    set overlay2(v: string)
     {
         this._overlay2 = this._StringClean(v);
     };
 
-    get overlay2()
+    get overlay2(): string
     {
         return this._overlay2;
     };
 
-    set spdist1(v)
+    set spdist1(v: string)
     {
         this._spdist1 = this._StringClean(v);
     };
 
-    get spdist1()
+    get spdist1(): string
     {
         return this._spdist1;
     };
 
-    set spdist2(v)
+    set spdist2(v: string)
     {
         this._spdist2 = this._StringClean(v);
     };
 
-    get spdist2()
+    get spdist2(): string
     {
         return this._spdist2;
     };
 
-    set spdist3(v)
+    set spdist3(v: string)
     {
         this._spdist3 = this._StringClean(v);
     };
 
-    get spdist3()
+    get spdist3(): string
     {
         return this._spdist3;
     };
 
-    set ltdheight(v)
+    set ltdheight(v: string)
     {
         this._ltdheight = this._StringClean(v);
     };
 
-    get ltdheight()
+    get ltdheight(): string
     {
         return this._ltdheight;
     };
 
-    set splitzone(v)
+    set splitzone(v: string)
     {
         this._splitzone = this._StringClean(v);
     };
 
-    get splitzone()
+    get splitzone(): string
     {
         return this._splitzone;
     };
 
-    set bldgclass(v)
+    set bldgclass(v: string)
     {
         this._bldgclass = this._StringClean(v);
     };
 
-    get bldgclass()
+    get bldgclass(): string
     {
         return this._bldgclass;
     };
 
-    set landuse(v)
+    set landuse(v: string)
     {
         this._landuse = this._StringClean(v);
     };
 
-    get landuse()
+    get landuse(): string
     {
         return this._landuse;
     };
 
-    set easements(v)
+    set easements(v: string)
     {
         this._easements = this._StringClean(v);
     };
 
-    get easements()
+    get easements(): string
     {
         return this._easements;
     };
 
-    set ownertype(v)
+    set ownertype(v: string)
     {
         this._ownertype = this._StringClean(v);
     };
 
-    get ownertype()
+    get ownertype(): string
     {
         return this._ownertype;
     };
 
-    set ownername(v)
+    set ownername(v: string)
     {
         this._ownername = this._StringClean(v);
     };
 
-    get ownername()
+    get ownername(): string
     {
         return this._ownername;
     };
 
-    set lotarea(v)
+    set lotarea(v: number)
     {
-        this._lotarea = this._StringClean(v);
+        this._lotarea = v;
     };
 
-    get lotarea()
+    get lotarea(): number
     {
         return this._lotarea;
     };
 
-    set bldgarea(v)
+    set bldgarea(v: number)
     {
-        this._bldgarea = this._StringClean(v);
+        this._bldgarea = v;
     };
 
-    get bldgarea()
+    get bldgarea(): number
     {
         return this._bldgarea;
     };
 
-    set comarea(v)
+    set comarea(v: number)
     {
-        this._comarea = this._StringClean(v);
+        this._comarea = v;
     };
 
-    get comarea()
+    get comarea(): number
     {
         return this._comarea;
     };
 
-    set resarea(v)
+    set resarea(v: number)
     {
-        this._resarea = this._StringClean(v);
+        this._resarea = v;
     };
 
-    get resarea()
+    get resarea(): number
     {
         return this._resarea;
     };
 
-    set officearea(v)
+    set officearea(v: number)
     {
-        this._officearea = this._StringClean(v);
+        this._officearea = v;
     };
 
-    get officearea()
+    get officearea(): number
     {
         return this._officearea;
     };
 
-    set retailarea(v)
+    set retailarea(v: number)
     {
-        this._retailarea = this._StringClean(v);
+        this._retailarea = v;
     };
 
-    get retailarea()
+    get retailarea(): number
     {
         return this._retailarea;
     };
 
-    set garagearea(v)
+    set garagearea(v: number)
     {
-        this._garagearea = this._StringClean(v);
+        this._garagearea = v;
     };
 
-    get garagearea()
+    get garagearea(): number
     {
         return this._garagearea;
     };
 
-    set strgearea(v)
+    set strgearea(v: number)
     {
-        this._strgearea = this._StringClean(v);
+        this._strgearea = v;
     };
 
-    get strgearea()
+    get strgearea(): number
     {
         return this._strgearea;
     };
 
-    set factryarea(v)
+    set factryarea(v: number)
     {
-        this._factryarea = this._StringClean(v);
+        this._factryarea = v;
     };
 
-    get factryarea()
+    get factryarea(): number
     {
         return this._factryarea;
     };
 
-    set otherarea(v)
+    set otherarea(v: number)
     {
-        this._otherarea = this._StringClean(v);
+        this._otherarea = v;
     };
 
-    get otherarea()
+    get otherarea(): number
     {
         return this._otherarea;
     };
@@ -686,39 +686,39 @@ class Pluto
         return this._areasource;
     };
 
-    set numbldgs(v)
+    set numbldgs(v: number)
     {
-        this._numbldgs = this._StringClean(v);
+        this._numbldgs = v;
     };
 
-    get numbldgs()
+    get numbldgs(): number
     {
         return this._numbldgs;
     };
 
-    set numfloors(v)
+    set numfloors(v: number)
     {
-        this._numfloors = this._StringClean(v);
+        this._numfloors = v;
     };
 
-    get numfloors()
+    get numfloors(): number
     {
         return this._numfloors;
     };
 
-    set unitsres(v)
+    set unitsres(v: number)
     {
-        this._unitsres = this._StringClean(v);
+        this._unitsres = v;
     };
 
-    get unitsres()
+    get unitsres(): number
     {
         return this._unitsres;
     };
 
-    set unitstotal(v)
+    set unitstotal(v: number)
     {
-        this._unitstotal = this._StringClean(v);
+        this._unitstotal = v;
     };
 
     get unitstotal()
@@ -726,42 +726,42 @@ class Pluto
         return this._unitstotal;
     };
 
-    set lotfront(v)
+    set lotfront(v: number)
     {
-        this._lotfront = this._StringClean(v);
+        this._lotfront = v;
     };
 
-    get lotfront()
+    get lotfront(): number
     {
         return this._lotfront;
     };
 
-    set lotdepth(v)
+    set lotdepth(v: number)
     {
-        this._lotdepth = this._StringClean(v);
+        this._lotdepth = v;
     };
 
-    get lotdepth()
+    get lotdepth(): number
     {
         return this._lotdepth;
     };
 
-    set bldgfront(v)
+    set bldgfront(v: number)
     {
-        this._bldgfront = this._StringClean(v);
+        this._bldgfront = v;
     };
 
-    get bldgfront()
+    get bldgfront(): number
     {
         return this._bldgfront;
     };
 
-    set bldgdepth(v)
+    set bldgdepth(v: number)
     {
-        this._bldgdepth = this._StringClean(v);
+        this._bldgdepth = v;
     };
 
-    get bldgdepth()
+    get bldgdepth(): number
     {
         return this._bldgdepth;
     };
@@ -816,62 +816,62 @@ class Pluto
         return this._bsmtcode;
     };
 
-    set assessland(v)
+    set assessland(v: number)
     {
-        this._assessland = this._StringClean(v);
+        this._assessland = v;
     };
 
-    get assessland()
+    get assessland(): number
     {
         return this._assessland;
     };
 
-    set assesstot(v)
+    set assesstot(v: number)
     {
-        this._assesstot = this._StringClean(v);
+        this._assesstot = v;
     };
 
-    get assesstot()
+    get assesstot(): number
     {
         return this._assesstot;
     };
 
-    set exempttot(v)
+    set exempttot(v: number)
     {
-        this._exempttot = this._StringClean(v);
+        this._exempttot = v;
     };
 
-    get exempttot()
+    get exempttot(): number
     {
         return this._exempttot;
     };
 
-    set yearbuilt(v)
+    set yearbuilt(v: number)
     {
-        this._yearbuilt = this._StringClean(v);
+        this._yearbuilt = v;
     };
 
-    get yearbuilt()
+    get yearbuilt(): number
     {
         return this._yearbuilt;
     };
 
-    set yearalter1(v)
+    set yearalter1(v: number)
     {
-        this._yearalter1 = this._StringClean(v);
+        this._yearalter1 = v;
     };
 
-    get yearalter1()
+    get yearalter1(): number
     {
         return this._yearalter1;
     };
 
-    set yearalter2(v)
+    set yearalter2(v: number)
     {
-        this._yearalter2 = this._StringClean(v);
+        this._yearalter2 = v;
     };
 
-    get yearalter2()
+    get yearalter2(): number
     {
         return this._yearalter2;
     };
@@ -896,242 +896,242 @@ class Pluto
         return this._landmark;
     };
 
-    set builtfar(v)
+    set builtfar(v: number)
     {
-        this._builtfar = this._StringClean(v);
+        this._builtfar = v;
     };
 
-    get builtfar()
+    get builtfar(): number
     {
         return this._builtfar;
     };
 
-    set residfar(v)
+    set residfar(v: number)
     {
-        this._residfar = this._StringClean(v);
+        this._residfar = v;
     };
 
-    get residfar()
+    get residfar(): number
     {
         return this._residfar;
     };
 
-    set commfar(v)
+    set commfar(v: number)
     {
-        this._commfar = this._StringClean(v);
+        this._commfar = v;
     };
 
-    get commfar()
+    get commfar(): number
     {
         return this._commfar;
     };
 
-    set facilfar(v)
+    set facilfar(v: number)
     {
-        this._facilfar = this._StringClean(v);
+        this._facilfar = v;
     };
 
-    get facilfar()
+    get facilfar(): number
     {
         return this._facilfar;
     };
 
-    set borocode(v)
+    set borocode(v: string)
     {
-        this._borocode = this._StringClean(v);
+        this._borocode = v;
     };
 
-    get borocode()
+    get borocode(): string
     {
         return this._borocode;
     };
 
-    set bbl(v)
+    set bbl(v: string)
     {
         this._bbl = this._StringClean(v);
     };
 
-    get bbl()
+    get bbl(): string
     {
         return this._bbl;
     };
 
-    set condono(v)
+    set condono(v: string)
     {
         this._condono = this._StringClean(v);
     };
 
-    get condono()
+    get condono(): string
     {
         return this._condono;
     };
 
-    set tract2010(v)
+    set tract2010(v: string)
     {
         this._tract2010 = this._StringClean(v);
     };
 
-    get tract2010()
+    get tract2010(): string
     {
         return this._tract2010;
     };
 
-    set xcoord(v)
+    set xcoord(v: number)
     {
-        this._xcoord = this._StringClean(v);
+        this._xcoord = v;
     };
 
-    get xcoord()
+    get xcoord(): number
     {
         return this._xcoord;
     };
 
-    set ycoord(v)
+    set ycoord(v: number)
     {
-        this._ycoord = this._StringClean(v);
+        this._ycoord = v;
     };
 
-    get ycoord()
+    get ycoord(): number 
     {
         return this._ycoord;
     };
 
-    set zonemap(v)
+    set zonemap(v: string)
     {
         this._zonemap = this._StringClean(v);
     };
 
-    get zonemap()
+    get zonemap(): string
     {
         return this._zonemap;
     };
 
-    set zmcode(v)
+    set zmcode(v: string)
     {
         this._zmcode = this._StringClean(v);
     };
 
-    get zmcode()
+    get zmcode(): string
     {
         return this._zmcode;
     };
 
-    set sanborn(v)
+    set sanborn(v: string)
     {
         this._sanborn = this._StringClean(v);
     };
 
-    get sanborn()
+    get sanborn(): string
     {
         return this._sanborn;
     };
 
-    set taxmap(v)
+    set taxmap(v: string)
     {
         this._taxmap = this._StringClean(v);
     };
 
-    get taxmap()
+    get taxmap(): string
     {
         return this._taxmap;
     };
 
-    set edesignum(v)
+    set edesignum(v: string)
     {
         this._edesignum = this._StringClean(v);
     };
 
-    get edesignum()
+    get edesignum(): string
     {
         return this._edesignum;
     };
 
-    set appbbl(v)
+    set appbbl(v: string)
     {
         this._appbbl = this._StringClean(v);
     };
 
-    get appbbl()
+    get appbbl(): string
     {
         return this._appbbl;
     };
 
-    set appdate(v)
+    set appdate(v: string)
     {
         this._appdate = this._StringClean(v);
     };
 
-    get appdate()
+    get appdate(): string
     {
         return this._appdate;
     };
 
-    set plutomapid(v)
+    set plutomapid(v: string)
     {
         this._plutomapid = this._StringClean(v);
     };
 
-    get plutomapid()
+    get plutomapid(): string
     {
         return this._plutomapid;
     };
 
-    set firm07flag(v)
+    set firm07flag(v: string)
     {
         this._firm07flag = this._StringClean(v);
     };
 
-    get firm07flag()
+    get firm07flag(): string
     {
         return this._firm07flag;
     };
 
-    set pfirm15flag(v)
+    set pfirm15flag(v: string)
     {
         this._pfirm15flag = this._StringClean(v);
     };
 
-    get pfirm15flag()
+    get pfirm15flag(): string
     {
         return this._pfirm15flag;
     };
 
-    set dcpedited(v)
+    set dcpedited(v: string)
     {
         this._dcpedited = this._StringClean(v);
     };
 
-    get dcpedited()
+    get dcpedited(): string
     {
         return this._dcpedited;
     };
 
-    set latitude(v)
+    set latitude(v: number)
     {
-        this._latitude = this._StringClean(v);
+        this._latitude = v;
     };
 
-    get latitude()
+    get latitude(): number
     {
         return this._latitude;
     };
 
-    set longitude(v)
+    set longitude(v: number)
     {
-        this._longitude = this._StringClean(v);
+        this._longitude = v;
     };
 
-    get longitude()
+    get longitude(): number
     {
         return this._longitude;
     };
 
-    set notes(v)
+    set notes(v: string)
     {
         this._notes = this._StringClean(v);
     };
 
-    get notes()
+    get notes(): string
     {
         return this._notes;
     };

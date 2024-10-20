@@ -9,7 +9,7 @@ class PadDownloader extends Downloader
     _dataUrl = "https://www.nyc.gov/site/planning/data-maps/open-data.page#other";
 
 
-    constructor(config)
+    constructor(config: any)
     {
         super(config);
     };

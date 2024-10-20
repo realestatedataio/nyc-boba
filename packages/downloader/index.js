@@ -55,7 +55,7 @@ class Downloader {
             ];
     }
     ;
-    async _Sleep(ms) {
+    async _WaitForTimeout(ms) {
         return new Promise((resolve) => { setTimeout(resolve, ms); });
     }
     ;
@@ -121,6 +121,7 @@ class Downloader {
         this._browserCdp = await this._browser.target().createCDPSession();
         this._cdp = await this._page.target().createCDPSession();
         this._SetDownloadPath(this._browserDownloadDir);
+        return this._browser;
     }
     ;
     async NavigateToDataUrl() {
@@ -128,7 +129,7 @@ class Downloader {
             console.error("No page detected.");
             return;
         }
-        await this._page.goto(this._dataUrl, { "timeout": 30000 });
+        return await this._page.goto(this._dataUrl, { "timeout": 30000 });
     }
     ;
     IsDesiredFile(e) {

@@ -11,7 +11,7 @@ class SndMapper
     };
 
 
-    async FromFile(d)
+    async FromFile(d: string): Promise<Snd>
     {
         let s = new Snd();
 
@@ -27,7 +27,7 @@ class SndMapper
         s.filler = d.substring(47, 49);
         s.numericind = d.substring(49, 50);
         s.gft = d.substring(50, 51);
-        s.lenfullname = d.substring(51, 53);
+        s.lenfullname = parseInt(d.substring(51, 53));
         s.fullstname = d.substring(53, 85);
         s.minsnl = d.substring(85, 87);
         s.stn20 = d.substring(87, 107);
@@ -44,7 +44,7 @@ class SndFrontTruncatedMapper
     };
 
     
-    async FromFile(d)
+    async FromFile(d: string): Promise<SndFrontTruncated>
     {
         let s = new SndFrontTruncated();
 
@@ -55,8 +55,8 @@ class SndFrontTruncatedMapper
         s.filler = d.substring(34, 48);
         s.numericind = d.substring(49, 50);
         s.gft = d.substring(50, 51);
-        s.lenfullname = d.substring(51, 53);
-        s.numofprogens = d.substring(53, 54);
+        s.lenfullname = parseInt(d.substring(51, 53));
+        s.numofprogens = parseInt(d.substring(53, 54));
         s.progenword1 = d.substring(54, 55);
         s.progengft1 = d.substring(55, 56);
         s.progenb10sc1 = d.substring(56, 67);

@@ -149,7 +149,7 @@ class Snd {
     }
     ;
     set lenfullname(v) {
-        this._lenfullname = this._StringClean(v);
+        this._lenfullname = v;
     }
     ;
     get lenfullname() {
@@ -301,7 +301,7 @@ class SndFrontTruncated {
     }
     ;
     set lenfullname(v) {
-        this._lenfullname = this._StringClean(v);
+        this._lenfullname = v;
     }
     ;
     get lenfullname() {
@@ -309,7 +309,7 @@ class SndFrontTruncated {
     }
     ;
     set numofprogens(v) {
-        this._numofprogens = this._StringClean(v);
+        this._numofprogens = v;
     }
     ;
     get numofprogens() {

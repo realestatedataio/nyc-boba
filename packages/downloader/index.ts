@@ -8,9 +8,9 @@ class Downloader
 {
     _config: any = {};
 
-    _browserPath = null;
-    _browserUserDataDir = null;
-    _browserDownloadDir = null;
+    _browserPath: string = null;
+    _browserUserDataDir: string = null;
+    _browserDownloadDir: string = null;
 
     _browserArgs = 
     [
@@ -32,19 +32,19 @@ class Downloader
         "--user-data-dir=" + this._browserUserDataDir
     ];
 
-    _browser = null;
-    _browserCdp = null;
+    _browser: puppeteer.Browser = null;
+    _browserCdp: puppeteer.CDPSession = null;
 
-    _page = null;
-    _cdp = null;
+    _page: puppeteer.Page = null;
+    _cdp: puppeteer.CDPSession = null;
 
-    _expectedFilePrefix = null;
-    _expectedFileExtension = null;
+    _expectedFilePrefix: string = null;
+    _expectedFileExtension: string = null;
 
-    _dataUrl = null;
+    _dataUrl: string = null;
 
 
-    constructor(config)
+    constructor(config: any)
     {
         this._config = config ? config : this._config;
 
@@ -74,17 +74,17 @@ class Downloader
     };
 
     
-    async _Sleep(ms)
+    async _WaitForTimeout(ms: number): Promise<void>
     {
         return new Promise((resolve) => { setTimeout(resolve, ms); });
     };
 
-    async _WaitForDownload(fileName)
+    async _WaitForDownload(fileName: string): Promise<string>
     {
         console.log("Waiting for download of " + fileName);
         let that = this;
 
-        const GeneratorFunc = (resolve, reject) =>
+        const GeneratorFunc = (resolve: (v: string) => any, reject: () => any) =>
         {
             that._browserCdp.on("Browser.downloadProgress", (evt) =>
             {
@@ -111,7 +111,7 @@ class Downloader
     };
 
 
-    async _SetDownloadPath(path)
+    async _SetDownloadPath(path: string): Promise<void>
     {
         if (this._cdp === null)
         {
@@ -128,11 +128,11 @@ class Downloader
     };
 
 
-    async Init()
+    async Init(): Promise<void>
     {
     };
 
-    async CloseBrowser()
+    async CloseBrowser(): Promise<void>
     {
         if (this._browserCdp)
         {
@@ -150,7 +150,7 @@ class Downloader
         }
     };
 
-    async LaunchBrowser()
+    async LaunchBrowser(): Promise<puppeteer.Browser>
     {
         await this.CloseBrowser();
 
@@ -170,9 +170,11 @@ class Downloader
         this._cdp = await this._page.target().createCDPSession();
 
         this._SetDownloadPath(this._browserDownloadDir);
+
+        return this._browser;
     };
 
-    async NavigateToDataUrl()
+    async NavigateToDataUrl(): Promise<puppeteer.HTTPResponse>
     {
         if (this._page === null)
         {
@@ -180,10 +182,10 @@ class Downloader
             return;
         }
 
-        await this._page.goto(this._dataUrl, {"timeout": 30000});
+        return await this._page.goto(this._dataUrl, {"timeout": 30000});
     };
 
-    IsDesiredFile(e)
+    IsDesiredFile(e: string): boolean
     {
         if (e && e.indexOf(this._expectedFilePrefix) !== -1 && e.indexOf(this._expectedFileExtension) !== -1)
         {
@@ -193,10 +195,10 @@ class Downloader
         return false;
     };
 
-    async GetFileData()
+    async GetFileData(): Promise<any>
     {
-        let fileLinkFound = false;
-        let fileName = null;
+        let fileLinkFound: boolean = false;
+        let fileName: string = null;
 
         try
         {
@@ -207,7 +209,7 @@ class Downloader
             {
                 try
                 {
-                    let e = linkEles[i];
+                    let e: any = linkEles[i];
                     e = e ? await linkEles[i].getProperty("href") : null;
                     e = e ? await e.jsonValue() : null;
                     e = e ? e.trim() : null;
@@ -239,9 +241,9 @@ class Downloader
         return null;
     };
 
-    async Run()
+    async Run(): Promise<string>
     {
-        let fileData = null;
+        let fileData: any = null;
 
         try
         {

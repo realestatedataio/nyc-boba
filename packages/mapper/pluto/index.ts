@@ -11,7 +11,7 @@ class PlutoMapper
     };
 
 
-    async FromCsv(d)
+    async FromCsv(d: any): Promise<Pluto>
     {
         let p = new Pluto();
 
@@ -51,48 +51,48 @@ class PlutoMapper
         p.easements = d.hasOwnProperty("easements") && d.easements ? d.easements : null;
         p.ownertype = d.hasOwnProperty("ownertype") && d.ownertype ? d.ownertype : null;
         p.ownername = d.hasOwnProperty("ownername") && d.ownername ? d.ownername : null;
-        p.lotarea = d.hasOwnProperty("lotarea") && d.lotarea ? d.lotarea : null;
-        p.bldgarea = d.hasOwnProperty("bldgarea") && d.bldgarea ? d.bldgarea : null;
-        p.comarea = d.hasOwnProperty("comarea") && d.comarea ? d.comarea : null;
-        p.resarea = d.hasOwnProperty("resarea") && d.resarea ? d.resarea : null;
-        p.officearea = d.hasOwnProperty("officearea") && d.officearea ? d.officearea : null;
-        p.retailarea = d.hasOwnProperty("retailarea") && d.retailarea ? d.retailarea : null;
-        p.garagearea = d.hasOwnProperty("garagearea") && d.garagearea ? d.garagearea : null;
-        p.strgearea = d.hasOwnProperty("strgearea") && d.strgearea ? d.strgearea : null;
-        p.factryarea = d.hasOwnProperty("factryarea") && d.factryarea ? d.factryarea : null;
-        p.otherarea = d.hasOwnProperty("otherarea") && d.otherarea ? d.otherarea : null;
+        p.lotarea = d.hasOwnProperty("lotarea") && d.lotarea ? parseInt(d.lotarea) : null;
+        p.bldgarea = d.hasOwnProperty("bldgarea") && d.bldgarea ? parseInt(d.bldgarea) : null;
+        p.comarea = d.hasOwnProperty("comarea") && d.comarea ? parseInt(d.comarea) : null;
+        p.resarea = d.hasOwnProperty("resarea") && d.resarea ? parseInt(d.resarea) : null;
+        p.officearea = d.hasOwnProperty("officearea") && d.officearea ? parseInt(d.officearea) : null;
+        p.retailarea = d.hasOwnProperty("retailarea") && d.retailarea ? parseInt(d.retailarea) : null;
+        p.garagearea = d.hasOwnProperty("garagearea") && d.garagearea ? parseInt(d.garagearea) : null;
+        p.strgearea = d.hasOwnProperty("strgearea") && d.strgearea ? parseInt(d.strgearea) : null;
+        p.factryarea = d.hasOwnProperty("factryarea") && d.factryarea ? parseInt(d.factryarea) : null;
+        p.otherarea = d.hasOwnProperty("otherarea") && d.otherarea ? parseInt(d.otherarea) : null;
         p.areasource = d.hasOwnProperty("areasource") && d.areasource ? d.areasource : null;
-        p.numbldgs = d.hasOwnProperty("numbldgs") && d.numbldgs ? d.numbldgs : null;
-        p.numfloors = d.hasOwnProperty("numfloors") && d.numfloors ? d.numfloors : null;
-        p.unitsres = d.hasOwnProperty("unitsres") && d.unitsres ? d.unitsres : null;
-        p.unitstotal = d.hasOwnProperty("unitstotal") && d.unitstotal ? d.unitstotal : null;
-        p.lotfront = d.hasOwnProperty("lotfront") && d.lotfront ? d.lotfront : null;
-        p.lotdepth = d.hasOwnProperty("lotdepth") && d.lotdepth ? d.lotdepth : null;
-        p.bldgfront = d.hasOwnProperty("bldgfront") && d.bldgfront ? d.bldgfront : null;
-        p.bldgdepth = d.hasOwnProperty("bldgdepth") && d.bldgdepth ? d.bldgdepth : null;
+        p.numbldgs = d.hasOwnProperty("numbldgs") && d.numbldgs ? parseInt(d.numbldgs) : null;
+        p.numfloors = d.hasOwnProperty("numfloors") && d.numfloors ? parseFloat(d.numfloors) : null;
+        p.unitsres = d.hasOwnProperty("unitsres") && d.unitsres ? parseInt(d.unitsres) : null;
+        p.unitstotal = d.hasOwnProperty("unitstotal") && d.unitstotal ? parseInt(d.unitstotal) : null;
+        p.lotfront = d.hasOwnProperty("lotfront") && d.lotfront ? parseFloat(d.lotfront) : null;
+        p.lotdepth = d.hasOwnProperty("lotdepth") && d.lotdepth ? parseFloat(d.lotdepth) : null;
+        p.bldgfront = d.hasOwnProperty("bldgfront") && d.bldgfront ? parseFloat(d.bldgfront) : null;
+        p.bldgdepth = d.hasOwnProperty("bldgdepth") && d.bldgdepth ? parseFloat(d.bldgdepth) : null;
         p.ext = d.hasOwnProperty("ext") && d.ext ? d.ext : null;
         p.proxcode = d.hasOwnProperty("proxcode") && d.proxcode ? d.proxcode : null;
         p.irrlotcode = d.hasOwnProperty("irrlotcode") && d.irrlotcode ? d.irrlotcode : null;
         p.lottype = d.hasOwnProperty("lottype") && d.lottype ? d.lottype : null;
         p.bsmtcode = d.hasOwnProperty("bsmtcode") && d.bsmtcode ? d.bsmtcode : null;
-        p.assessland = d.hasOwnProperty("assessland") && d.assessland ? d.assessland : null;
-        p.assesstot = d.hasOwnProperty("assesstot") && d.assesstot ? d.assesstot : null;
-        p.exempttot = d.hasOwnProperty("exempttot") && d.exempttot ? d.exempttot : null;
-        p.yearbuilt = d.hasOwnProperty("yearbuilt") && d.yearbuilt ? d.yearbuilt : null;
-        p.yearalter1 = d.hasOwnProperty("yearalter1") && d.yearalter1 ? d.yearalter1 : null;
-        p.yearalter2 = d.hasOwnProperty("yearalter2") && d.yearalter2 ? d.yearalter2 : null;
+        p.assessland = d.hasOwnProperty("assessland") && d.assessland ? parseFloat(d.assessland) : null;
+        p.assesstot = d.hasOwnProperty("assesstot") && d.assesstot ? parseFloat(d.assesstot) : null;
+        p.exempttot = d.hasOwnProperty("exempttot") && d.exempttot ? parseFloat(d.exempttot) : null;
+        p.yearbuilt = d.hasOwnProperty("yearbuilt") && d.yearbuilt ? parseInt(d.yearbuilt) : null;
+        p.yearalter1 = d.hasOwnProperty("yearalter1") && d.yearalter1 ? parseInt(d.yearalter1) : null;
+        p.yearalter2 = d.hasOwnProperty("yearalter2") && d.yearalter2 ? parseInt(d.yearalter2) : null;
         p.histdist = d.hasOwnProperty("histdist") && d.histdist ? d.histdist : null;
         p.landmark = d.hasOwnProperty("landmark") && d.landmark ? d.landmark : null;
-        p.builtfar = d.hasOwnProperty("builtfar") && d.builtfar ? d.builtfar : null;
-        p.residfar = d.hasOwnProperty("residfar") && d.residfar ? d.residfar : null;
-        p.commfar = d.hasOwnProperty("commfar") && d.commfar ? d.commfar : null;
-        p.facilfar = d.hasOwnProperty("facilfar") && d.facilfar ? d.facilfar : null;
+        p.builtfar = d.hasOwnProperty("builtfar") && d.builtfar ? parseFloat(d.builtfar) : null;
+        p.residfar = d.hasOwnProperty("residfar") && d.residfar ? parseFloat(d.residfar) : null;
+        p.commfar = d.hasOwnProperty("commfar") && d.commfar ? parseFloat(d.commfar) : null;
+        p.facilfar = d.hasOwnProperty("facilfar") && d.facilfar ? parseFloat(d.facilfar) : null;
         p.borocode = d.hasOwnProperty("borocode") && d.borocode ? d.borocode : null;
         p.bbl = d.hasOwnProperty("bbl") && d.bbl ? d.bbl : null;
         p.condono = d.hasOwnProperty("condono") && d.condono ? d.condono : null;
         p.tract2010 = d.hasOwnProperty("tract2010") && d.tract2010 ? d.tract2010 : null;
-        p.xcoord = d.hasOwnProperty("xcoord") && d.xcoord ? d.xcoord : null;
-        p.ycoord = d.hasOwnProperty("ycoord") && d.ycoord ? d.ycoord : null;
+        p.xcoord = d.hasOwnProperty("xcoord") && d.xcoord ? parseInt(d.xcoord) : null;
+        p.ycoord = d.hasOwnProperty("ycoord") && d.ycoord ? parseInt(d.ycoord) : null;
         p.zonemap = d.hasOwnProperty("zonemap") && d.zonemap ? d.zonemap : null;
         p.zmcode = d.hasOwnProperty("zmcode") && d.zmcode ? d.zmcode : null;
         p.sanborn = d.hasOwnProperty("sanborn") && d.sanborn ? d.sanborn : null;
@@ -105,8 +105,8 @@ class PlutoMapper
         p.pfirm15flag = d.hasOwnProperty("pfirm15_flag") && d.pfirm15_flag ? d.pfirm15_flag : null;
         p.version = d.hasOwnProperty("version") && d.version ? d.version : null;
         p.dcpedited = d.hasOwnProperty("dcpedited") && d.dcpedited ? d.dcpedited : null;
-        p.latitude = d.hasOwnProperty("latitude") && d.latitude ? d.latitude : null;
-        p.longitude = d.hasOwnProperty("longitude") && d.longitude ? d.longitude : null;
+        p.latitude = d.hasOwnProperty("latitude") && d.latitude ? parseFloat(d.latitude) : null;
+        p.longitude = d.hasOwnProperty("longitude") && d.longitude ? parseFloat(d.longitude) : null;
         p.notes = d.hasOwnProperty("notes") && d.notes ? d.notes : null;
 
         return p;

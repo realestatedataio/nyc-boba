@@ -1,29 +1,29 @@
 class Snd
 {
-    _version = null;
-    _rectype = null;
-    _boro = null;
-    _stname = null;
-    _primaryflag = null;
-    _principalflag = null;
-    _sc5 = null;
-    _lgc = null;
-    _spv = null;
-    _filler = null;
-    _numericind = null;
-    _gft = null;
-    _lenfullname = null;
-    _fullstname = null;
-    _minsnl = null;
-    _stn20 = null;
-    _htnametypecode = null;
+    _version: string = null;
+    _rectype: string = null;
+    _boro: string = null;
+    _stname: string = null;
+    _primaryflag: string = null;
+    _principalflag: string = null;
+    _sc5: string = null;
+    _lgc: string = null;
+    _spv: string = null;
+    _filler: string = null;
+    _numericind: string = null;
+    _gft: string = null;
+    _lenfullname: number = null;
+    _fullstname: string = null;
+    _minsnl: string = null;
+    _stn20: string = null;
+    _htnametypecode: string = null;
 
     
     constructor()
     {
     };
 
-    ToJson()
+    ToJson(): any
     {
         let d = 
         {
@@ -55,7 +55,7 @@ class Snd
     /* Misc */
     /********/
 
-    _StringClean(v)
+    _StringClean(v: string): string
     {
         return v ? v.replace(/\s+/g, " ").trim() : null;
     };
@@ -66,195 +66,196 @@ class Snd
     /* Setters & Getters */
     /*********************/
 
-    set version(v)
+    set version(v: string)
     {
         this._version = v;
     };
 
-    get version()
+    get version(): string
     {
         return this._version;
     };
 
-    set rectype(v)
+    set rectype(v: string)
     {
         this._rectype = this._StringClean(v);
     };
 
-    get rectype()
+    get rectype(): string
     {
         return this._rectype;
     };
 
-    set boro(v)
+    set boro(v: string)
     {
         this._boro = this._StringClean(v);
     };
 
-    get boro()
+    get boro(): string
     {
         return this._boro;
     };
 
-    set stname(v)
+    set stname(v: string)
     {
         this._stname = this._StringClean(v);
     };
 
-    get stname()
+    get stname(): string
     {
         return this._stname;
     };
 
-    set primaryflag(v)
+    set primaryflag(v: string)
     {
         this._primaryflag = this._StringClean(v);
     };
 
-    get primaryflag()
+    get primaryflag(): string
     {
         return this._primaryflag;
     };
 
-    set principalflag(v)
+    set principalflag(v: string)
     {
         this._principalflag = this._StringClean(v);
     };
 
-    get principalflag()
+    get principalflag(): string
     {
         return this._principalflag;
     };
 
-    set sc5(v)
+    set sc5(v: string)
     {
         this._sc5 = this._StringClean(v);
     };
 
-    get sc5()
+    get sc5(): string
     {
         return this._sc5;
     };
 
-    set lgc(v)
+    set lgc(v: string)
     {
         this._lgc = this._StringClean(v);
     };
 
-    get lgc()
+    get lgc(): string
     {
         return this._lgc;
     };
 
-    set spv(v)
+    set spv(v: string)
     {
         this._spv = this._StringClean(v);
     };
 
-    get spv()
+    get spv(): string
     {
         return this._spv;
     };
 
-    set filler(v)
+    set filler(v: string)
     {
         this._filler = this._StringClean(v);
     };
 
-    get filler()
+    get filler(): string
     {
         return this._filler;
     };
 
-    set numericind(v)
+    set numericind(v: string)
     {
         this._numericind = this._StringClean(v);
     };
 
-    get numericind()
+    get numericind(): string
     {
         return this._numericind;
     };
 
-    set gft(v)
+    set gft(v: string)
     {
         this._gft = this._StringClean(v);
     };
 
-    get gft()
+    get gft(): string
     {
         return this._gft;
     };
 
-    set lenfullname(v)
+    set lenfullname(v: number)
     {
-        this._lenfullname = this._StringClean(v);
+        this._lenfullname = v;
     };
 
-    get lenfullname()
+    get lenfullname(): number
     {
         return this._lenfullname;
     };
 
-    set fullstname(v)
+    set fullstname(v: string)
     {
         this._fullstname = this._StringClean(v);
     };
 
-    get fullstname()
+    get fullstname(): string
     {
         return this._fullstname;
     };
 
-    set minsnl(v)
+    set minsnl(v: string)
     {
         this._minsnl = this._StringClean(v);
     };
 
-    get minsnl()
+    get minsnl(): string
     {
         return this._minsnl;
     };
 
-    set stn20(v)
+    set stn20(v: string)
     {
         this._stn20 = this._StringClean(v);
     };
 
-    get stn20()
+    get stn20(): string
     {
         return this._stn20;
     };
 
-    set htnametypecode(v)
+    set htnametypecode(v: string)
     {
         this._htnametypecode = this._StringClean(v);
     };
 
-    get htnametypecode()
+    get htnametypecode(): string
     {
         return this._htnametypecode;
     };
 };
+
 class SndFrontTruncated
 {
-    _version = null;
-    _rectype = null;
-    _boro = null;
-    _stname = null;
-    _filler = null;
-    _numericind = null;
-    _gft = null;
-    _lenfullname = null;
-    _numofprogens = null;
-    _progenword1 = null;
-    _progengft1 = null;
-    _progenb10sc1 = null;
-    _progenfiller1 = null;
-    _progenword2 = null;
-    _progengft2 = null;
-    _progenb10sc2 = null;
-    _progenfiller2 = null;
+    _version: string = null;
+    _rectype: string = null;
+    _boro: string = null;
+    _stname: string = null;
+    _filler: string = null;
+    _numericind: string = null;
+    _gft: string = null;
+    _lenfullname: number = null;
+    _numofprogens: number = null;
+    _progenword1: string = null;
+    _progengft1: string = null;
+    _progenb10sc1: string = null;
+    _progenfiller1: string = null;
+    _progenword2: string = null;
+    _progengft2: string = null;
+    _progenb10sc2: string = null;
+    _progenfiller2: string = null;
 
 
     constructor()
@@ -262,7 +263,7 @@ class SndFrontTruncated
     };
 
 
-    ToJson()
+    ToJson(): any
     {
         let d = 
         {
@@ -293,7 +294,7 @@ class SndFrontTruncated
     /* Misc */
     /********/
 
-    _StringClean(v)
+    _StringClean(v: string): string
     {
         return v ? v.replace(/\s+/g, " ").trim() : null;
     };
@@ -303,127 +304,127 @@ class SndFrontTruncated
     /* Setters * Getters */
     /*********************/
 
-    set version(v)
+    set version(v: string)
     {
         this._version = v;
     };
 
-    get version()
+    get version(): string
     {
         return this._version;
     };
 
-    set rectype(v)
+    set rectype(v: string)
     {
         this._rectype = this._StringClean(v);
     };
 
-    get rectype()
+    get rectype(): string
     {
         return this._rectype;
     };
 
-    set boro(v)
+    set boro(v: string)
     {
         this._boro = this._StringClean(v);
     };
 
-    get boro()
+    get boro(): string
     {
         return this._boro;
     };
 
-    set stname(v)
+    set stname(v: string)
     {
         this._stname = this._StringClean(v);
     };
 
-    get stname()
+    get stname(): string
     {
         return this._stname;
     };
 
-    set filler(v)
+    set filler(v: string)
     {
         this._filler = v;
     };
 
-    get filler()
+    get filler(): string
     {
         return this._filler;
     };
 
-    set numericind(v)
+    set numericind(v: string)
     {
         this._numericind = this._StringClean(v);
     };
 
-    get numericind()
+    get numericind(): string
     {
         return this._numericind;
     };
 
-    set gft(v)
+    set gft(v: string)
     {
         this._gft = this._StringClean(v);
     };
 
-    get gft()
+    get gft(): string
     {
         return this._gft;
     };
 
-    set lenfullname(v)
+    set lenfullname(v: number)
     {
-        this._lenfullname = this._StringClean(v);
+        this._lenfullname = v;
     };
 
-    get lenfullname()
+    get lenfullname(): number 
     {
         return this._lenfullname;
     };
 
-    set numofprogens(v)
+    set numofprogens(v: number)
     {
-        this._numofprogens = this._StringClean(v);
+        this._numofprogens = v;
     };
 
-    get numofprogens()
+    get numofprogens(): number 
     {
         return this._numofprogens;
     };
 
-    set progenword1(v)
+    set progenword1(v: string)
     {
         this._progenword1 = this._StringClean(v);
     };
 
-    get progenword1()
+    get progenword1(): string
     {
         return this._progenword1;
     };
 
-    set progengft1(v)
+    set progengft1(v: string)
     {
         this._progengft1 = this._StringClean(v);
     };
 
-    get progengft1()
+    get progengft1(): string
     {
         return this._progengft1;
     };
 
-    set progenb10sc1(v)
+    set progenb10sc1(v: string)
     {
         this._progenb10sc1 = this._StringClean(v);
     };
 
-    get progenb10sc1()
+    get progenb10sc1(): string
     {
         return this._progenb10sc1;
     };
 
-    set progenfiller1(v)
+    set progenfiller1(v: string)
     {
         this._progenfiller1 = this._StringClean(v);
     };
@@ -433,42 +434,42 @@ class SndFrontTruncated
         return this._progenfiller1;
     };
 
-    set progenword2(v)
+    set progenword2(v: string)
     {
         this._progenword2 = this._StringClean(v);
     };
 
-    get progenword2()
+    get progenword2(): string
     {
         return this._progenword2;
     };
 
-    set progengft2(v)
+    set progengft2(v: string)
     {
         this._progengft2 = this._StringClean(v);
     };
 
-    get progengft2()
+    get progengft2(): string
     {
         return this._progengft2;
     };
 
-    set progenb10sc2(v)
+    set progenb10sc2(v: string)
     {
         this._progenb10sc2 = this._StringClean(v);
     };
 
-    get progenb10sc2()
+    get progenb10sc2(): string
     {
         return this._progenb10sc2;
     };
 
-    set progenfiller2(v)
+    set progenfiller2(v: string)
     {
         this._progenfiller2 = this._StringClean(v);
     };
 
-    get progenfiller2()
+    get progenfiller2(): string
     {
         return this._progenfiller2;
     };

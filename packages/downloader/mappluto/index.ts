@@ -11,13 +11,13 @@ class MapPlutoDownloader extends Downloader
     _dataUrl = "https://www.nyc.gov/site/planning/data-maps/open-data/dwn-pluto-mappluto.page";
 
 
-    constructor(config)
+    constructor(config: any)
     {
         super(config);
     };
 
 
-    IsDesiredFile(e)
+    IsDesiredFile(e: string)
     {
         if (super.IsDesiredFile(e) === false)
         {

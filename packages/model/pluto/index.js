@@ -491,7 +491,7 @@ class Pluto {
     }
     ;
     set lotarea(v) {
-        this._lotarea = this._StringClean(v);
+        this._lotarea = v;
     }
     ;
     get lotarea() {
@@ -499,7 +499,7 @@ class Pluto {
     }
     ;
     set bldgarea(v) {
-        this._bldgarea = this._StringClean(v);
+        this._bldgarea = v;
     }
     ;
     get bldgarea() {
@@ -507,7 +507,7 @@ class Pluto {
     }
     ;
     set comarea(v) {
-        this._comarea = this._StringClean(v);
+        this._comarea = v;
     }
     ;
     get comarea() {
@@ -515,7 +515,7 @@ class Pluto {
     }
     ;
     set resarea(v) {
-        this._resarea = this._StringClean(v);
+        this._resarea = v;
     }
     ;
     get resarea() {
@@ -523,7 +523,7 @@ class Pluto {
     }
     ;
     set officearea(v) {
-        this._officearea = this._StringClean(v);
+        this._officearea = v;
     }
     ;
     get officearea() {
@@ -531,7 +531,7 @@ class Pluto {
     }
     ;
     set retailarea(v) {
-        this._retailarea = this._StringClean(v);
+        this._retailarea = v;
     }
     ;
     get retailarea() {
@@ -539,7 +539,7 @@ class Pluto {
     }
     ;
     set garagearea(v) {
-        this._garagearea = this._StringClean(v);
+        this._garagearea = v;
     }
     ;
     get garagearea() {
@@ -547,7 +547,7 @@ class Pluto {
     }
     ;
     set strgearea(v) {
-        this._strgearea = this._StringClean(v);
+        this._strgearea = v;
     }
     ;
     get strgearea() {
@@ -555,7 +555,7 @@ class Pluto {
     }
     ;
     set factryarea(v) {
-        this._factryarea = this._StringClean(v);
+        this._factryarea = v;
     }
     ;
     get factryarea() {
@@ -563,7 +563,7 @@ class Pluto {
     }
     ;
     set otherarea(v) {
-        this._otherarea = this._StringClean(v);
+        this._otherarea = v;
     }
     ;
     get otherarea() {
@@ -579,7 +579,7 @@ class Pluto {
     }
     ;
     set numbldgs(v) {
-        this._numbldgs = this._StringClean(v);
+        this._numbldgs = v;
     }
     ;
     get numbldgs() {
@@ -587,7 +587,7 @@ class Pluto {
     }
     ;
     set numfloors(v) {
-        this._numfloors = this._StringClean(v);
+        this._numfloors = v;
     }
     ;
     get numfloors() {
@@ -595,7 +595,7 @@ class Pluto {
     }
     ;
     set unitsres(v) {
-        this._unitsres = this._StringClean(v);
+        this._unitsres = v;
     }
     ;
     get unitsres() {
@@ -603,7 +603,7 @@ class Pluto {
     }
     ;
     set unitstotal(v) {
-        this._unitstotal = this._StringClean(v);
+        this._unitstotal = v;
     }
     ;
     get unitstotal() {
@@ -611,7 +611,7 @@ class Pluto {
     }
     ;
     set lotfront(v) {
-        this._lotfront = this._StringClean(v);
+        this._lotfront = v;
     }
     ;
     get lotfront() {
@@ -619,7 +619,7 @@ class Pluto {
     }
     ;
     set lotdepth(v) {
-        this._lotdepth = this._StringClean(v);
+        this._lotdepth = v;
     }
     ;
     get lotdepth() {
@@ -627,7 +627,7 @@ class Pluto {
     }
     ;
     set bldgfront(v) {
-        this._bldgfront = this._StringClean(v);
+        this._bldgfront = v;
     }
     ;
     get bldgfront() {
@@ -635,7 +635,7 @@ class Pluto {
     }
     ;
     set bldgdepth(v) {
-        this._bldgdepth = this._StringClean(v);
+        this._bldgdepth = v;
     }
     ;
     get bldgdepth() {
@@ -683,7 +683,7 @@ class Pluto {
     }
     ;
     set assessland(v) {
-        this._assessland = this._StringClean(v);
+        this._assessland = v;
     }
     ;
     get assessland() {
@@ -691,7 +691,7 @@ class Pluto {
     }
     ;
     set assesstot(v) {
-        this._assesstot = this._StringClean(v);
+        this._assesstot = v;
     }
     ;
     get assesstot() {
@@ -699,7 +699,7 @@ class Pluto {
     }
     ;
     set exempttot(v) {
-        this._exempttot = this._StringClean(v);
+        this._exempttot = v;
     }
     ;
     get exempttot() {
@@ -707,7 +707,7 @@ class Pluto {
     }
     ;
     set yearbuilt(v) {
-        this._yearbuilt = this._StringClean(v);
+        this._yearbuilt = v;
     }
     ;
     get yearbuilt() {
@@ -715,7 +715,7 @@ class Pluto {
     }
     ;
     set yearalter1(v) {
-        this._yearalter1 = this._StringClean(v);
+        this._yearalter1 = v;
     }
     ;
     get yearalter1() {
@@ -723,7 +723,7 @@ class Pluto {
     }
     ;
     set yearalter2(v) {
-        this._yearalter2 = this._StringClean(v);
+        this._yearalter2 = v;
     }
     ;
     get yearalter2() {
@@ -747,7 +747,7 @@ class Pluto {
     }
     ;
     set builtfar(v) {
-        this._builtfar = this._StringClean(v);
+        this._builtfar = v;
     }
     ;
     get builtfar() {
@@ -755,7 +755,7 @@ class Pluto {
     }
     ;
     set residfar(v) {
-        this._residfar = this._StringClean(v);
+        this._residfar = v;
     }
     ;
     get residfar() {
@@ -763,7 +763,7 @@ class Pluto {
     }
     ;
     set commfar(v) {
-        this._commfar = this._StringClean(v);
+        this._commfar = v;
     }
     ;
     get commfar() {
@@ -771,7 +771,7 @@ class Pluto {
     }
     ;
     set facilfar(v) {
-        this._facilfar = this._StringClean(v);
+        this._facilfar = v;
     }
     ;
     get facilfar() {
@@ -779,7 +779,7 @@ class Pluto {
     }
     ;
     set borocode(v) {
-        this._borocode = this._StringClean(v);
+        this._borocode = v;
     }
     ;
     get borocode() {
@@ -811,7 +811,7 @@ class Pluto {
     }
     ;
     set xcoord(v) {
-        this._xcoord = this._StringClean(v);
+        this._xcoord = v;
     }
     ;
     get xcoord() {
@@ -819,7 +819,7 @@ class Pluto {
     }
     ;
     set ycoord(v) {
-        this._ycoord = this._StringClean(v);
+        this._ycoord = v;
     }
     ;
     get ycoord() {
@@ -915,7 +915,7 @@ class Pluto {
     }
     ;
     set latitude(v) {
-        this._latitude = this._StringClean(v);
+        this._latitude = v;
     }
     ;
     get latitude() {
@@ -923,7 +923,7 @@ class Pluto {
     }
     ;
     set longitude(v) {
-        this._longitude = this._StringClean(v);
+        this._longitude = v;
     }
     ;
     get longitude() {
