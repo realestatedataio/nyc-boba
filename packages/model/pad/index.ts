@@ -439,6 +439,86 @@ class PadBbl
         return this._version;
     };
 
+    set loboro(v)
+    {
+        this._loboro = this._StringClean(v);
+    };
+
+    get loboro()
+    {
+        return this._loboro;
+    };
+
+    set loblock(v)
+    {
+        this._loblock = this._StringClean(v);
+    };
+
+    get loblock()
+    {
+        return this._loblock;
+    };
+
+    set lolot(v)
+    {
+        this._lolot = this._StringClean(v);
+    };
+
+    get lolot()
+    {
+        return this._lolot;
+    };
+
+    set lobblscc(v)
+    {
+        this._lobblscc = this._StringClean(v);
+    };
+
+    get lobblscc()
+    {
+        return this._lobblscc;
+    };
+
+    set hiboro(v)
+    {
+        this._hiboro = this._StringClean(v);
+    };
+
+    get hiboro()
+    {
+        return this._hiboro;
+    };
+
+    set hiblock(v)
+    {
+        this._hiblock = this._StringClean(v);
+    };
+
+    get hiblock()
+    {
+        return this._hiblock;
+    };
+
+    set hilot(v)
+    {
+        this._hilot = this._StringClean(v);
+    };
+
+    get hilot()
+    {
+        return this._hilot;
+    };
+
+    set hibblscc(v)
+    {
+        this._hibblscc = this._StringClean(v);
+    };
+
+    get hibblscc()
+    {
+        return this._hibblscc;
+    };
+
     set boro(v)
     {
         this._boro = this._StringClean(v);
@@ -479,14 +559,44 @@ class PadBbl
         return this._bblscc;
     };
 
-    set bin(v)
+    set billboro(v)
     {
-        this._bin = this._StringClean(v);
+        this._billboro = this._StringClean(v);
     };
 
-    get bin()
+    get billboro()
     {
-        return this._bin;
+        return this._billboro;
+    };
+
+    set billblock(v)
+    {
+        this._billblock = this._StringClean(v);
+    };
+
+    get billblock()
+    {
+        return this._billblock;
+    };
+
+    set billlot(v)
+    {
+        this._billlot = this._StringClean(v);
+    };
+
+    get billlot()
+    {
+        return this._billlot;
+    };
+
+    set billbblscc(v)
+    {
+        this._billbblscc = this._StringClean(v);
+    };
+
+    get billbblscc()
+    {
+        return this._billbblscc;
     };
 
     set condoflag(v)

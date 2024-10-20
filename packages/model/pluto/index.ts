@@ -88,7 +88,6 @@ class Pluto
     _plutomapid = null;
     _firm07flag = null;
     _pfirm15flag = null;
-    _version = null;
     _dcpedited = null;
     _latitude = null;
     _longitude = null;
@@ -192,7 +191,6 @@ class Pluto
             "plutomapid": this.plutomapid,
             "firm07flag": this.firm07flag,
             "pfirm15flag": this.pfirm15flag,
-            "version": this.version,
             "dcpedited": this.dcpedited,
             "latitude": this.latitude,
             "longitude": this.longitude,

@@ -6,7 +6,7 @@ import * as fs from "fs";
 
 class Downloader
 {
-    _config = {};
+    _config: any = {};
 
     _browserPath = null;
     _browserUserDataDir = null;
@@ -71,8 +71,6 @@ class Downloader
             "--start-maximized",
             "--user-data-dir=" + this._browserUserDataDir
         ];
-
-
     };
 
     
@@ -98,7 +96,8 @@ class Downloader
 
                 else if (evt.state === "inProgress")
                 {
-                    process.stdout.write("\rDownloading..." + Math.ceil((evt.receivedBytes / evt.totalBytes).toFixed(2) * 100) + "%");
+                    let p: number = Math.ceil(parseFloat((evt.receivedBytes / evt.totalBytes).toFixed(2)) * 100);
+                    process.stdout.write("\rDownloading..." + p + "%");
                 }
 
                 else if (evt.state === "canceled")
@@ -159,7 +158,7 @@ class Downloader
 
         this._browser = await puppeteer.launch
         ({
-            "headless": "new",
+            "headless": true,
             "timeout": 0,
             "executablePath": this._browserPath,
             "args": this._browserArgs,

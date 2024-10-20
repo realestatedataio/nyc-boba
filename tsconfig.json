@@ -1,0 +1,15 @@
+{
+    "compilerOptions":
+    {
+        "target": "esnext",
+        "module": "nodenext",
+        "moduleResolution": "nodenext"
+    },
+
+    "include":
+    [
+        "index.ts",
+        "index.test.ts",
+        "packages/**/*.ts"
+    ]
+}

@@ -1,11 +1,27 @@
 {
   "type": "module",
-  "name": "@redi/nyc-boba",
+  "name": "@realestatedata/nyc-boba",
   "version": "1.0.0",
   "description": "A library and toolset for automated collection and ingestion of the BYTES of the BIG APPLE (BOBA) datasets from NYC.",
-  "main": "index.js",
+  "exports": 
+  {
+    ".": "./index.js",
+
+    "./downloader/pad": "./packages/downloader/pad/index.js",
+    "./downloader/snd": "./packages/downloader/snd/index.js",
+    "./downloader/pluto": "./packages/downloader/pluto/index.js",
+    "./downloader/mappluto": "./packages/downloader/mappluto/index.js",
+
+    "./pad": "./packages/model/pad/index.js",
+    "./snd": "./packages/model/snd/index.js",
+    "./pluto": "./packages/model/pluto/index.js",
+
+    "./mapper/pad": "./packages/mapper/pad/index.js",
+    "./mapper/snd": "./packages/mapper/snd/index.js",
+    "./mapper/pluto": "./packages/mapper/pluto/index.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "repository": {
     "type": "git",

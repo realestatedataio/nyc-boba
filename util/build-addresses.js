@@ -15,69 +15,15 @@ let sndCollection = null;
 let sndFtCollection = null;
 let buildingCollection = null;
 
-const CreateBuilding = async (buildingCollection, building) =>
+
+const ProcessPadAddress = async (pad) =>
 {
-    let result = null;
+    let bbl = pad.boro + pad.block + pad.lot;
+    let scboro = pad.scboro;
+    let sc5 = pad.sc5;
+    let lowAddr = pad.lhnd + " " + pad.stname;
 
-    try
-    {
-        let exists = await buildingCollection.findOne({"bin": building.bin});
-
-        if (exists)
-        {
-            let missingAddresses = [];
-
-            for (let i = 0; i < building.addresses.length; i++)
-            {
-                let ba = building.addresses[i];
-                let addressExists = false;
-
-                for (let j = 0; j < exists.addresses.length; j++)
-                {
-                    let ea = exists.addresses[j];
-
-                    if (ba.cleanAddress === ea.cleanAddress)
-                    {
-                        addressExists = true;
-                        break;
-                    }
-                }
-
-                if (addressExists === false)
-                {
-                    missingAddresses.push(ba);
-                }
-            }
-
-            result = await buildingCollection.updateOne
-            (
-                {"bin": building.bin}, 
-                {"$set": {"addresses": exists.addresses.concat(missingAddresses)}}
-            );
-        }
-
-        else
-        {
-            result = await buildingCollection.insertOne(building);
-        }
-    }
-
-    catch (e)
-    {
-        console.log(e);
-    }
-
-    return result;
-};
-
-const ProcessPadAddress = async (pa) =>
-{
-    let bbl = pa.boro + pa.block + pa.lot;
-    let scboro = pa.scboro;
-    let sc5 = pa.sc5;
-    let lowAddr = pa.lhnd + " " + pa.stname;
-
-    let houseNumbers = BuildHouseNumbers(pa.lhnd, pa.hhnd, pa.lcontpar);
+    let houseNumbers = BuildHouseNumbers(pad.lhnd, pad.hhnd, pad.lcontpar);
 
     if (houseNumbers === null || (houseNumbers.length && houseNumbers[0].length === 0))
     {
@@ -89,16 +35,16 @@ const ProcessPadAddress = async (pa) =>
 
     let building = 
     {
-        "bin": pa.bin,
-        "boro": pa.boro,
-        "block": pa.block,
-        "lot": pa.lot,
+        "bin": pad.bin,
+        "boro": pad.boro,
+        "block": pad.block,
+        "lot": pad.lot,
         "addresses": []
     };
 
     if (building.bin && building.bin.match(/^[1-5]000000$/))
     {
-        return;
+        return null;
     }
 
     for (let i = 0; i < snds.length; i++)
@@ -109,6 +55,8 @@ const ProcessPadAddress = async (pa) =>
             addr = addr.replace(/\s+/g, " ").trim();
 
             let parsedAddr = await rediAddressParser.CleanAddress(addr);
+
+            //console.log(parsedAddr);
 
             building.addresses.push
             ({
@@ -131,15 +79,7 @@ const ProcessPadAddress = async (pa) =>
         }
     }
 
-    try
-    {
-        await CreateBuilding(buildingCollection, building);
-    }
-
-    catch (e)
-    {
-        console.error(e);
-    }
+    return building;
 };
 
 const BuildNumericHouseNumbers = (low, high, parity, pattern) =>
@@ -173,7 +113,7 @@ const BuildSingleLetterHouseNumbers = (low, high, parity, pattern) =>
 
     if (lowNumber !== highNumber && lowLetter !== highLetter)
     {
-        console.log("DIFFERENCE: " + lowLetter + " & " + highLetter + " & " + lowNumber + " & " + highNumber);
+        //console.log("DIFFERENCE: " + lowLetter + " & " + highLetter + " & " + lowNumber + " & " + highNumber);
         return null;
     }
 
@@ -326,6 +266,79 @@ const BuildHouseNumbers = (low, high, parity) =>
     return null;
 };
 
+
+const CreateBuilding = async (pads) =>
+{
+    let result = null;
+    let exists = null;
+    let padPromises = [];
+
+    //console.log(pads);
+
+    for (let i = 0; i < pads.length; i++)
+    {
+        padPromises.push(ProcessPadAddress(pads[i]));
+    }
+
+    padPromises = await Promise.allSettled(padPromises);
+
+    for (let i = 0; i < padPromises.length; i++)
+    {
+        let building = padPromises[i].value;
+
+        try
+        {
+            let insertResult = await buildingCollection.insertOne(building);
+            building._id = insertResult.insertedId;
+            exists = building;
+            result = building;
+        }
+
+        catch (e)
+        {
+            if (e.code !== 11000)
+            {
+                console.log(e);
+            }
+
+            exists = exists ? exists : await buildingCollection.findOne({"bin": building.bin});
+
+            if (exists)
+            {
+                for (let i = 0; i < building.addresses.length; i++)
+                {
+                    let ba = building.addresses[i];
+                    let addressExists = false;
+
+                    for (let j = 0; j < exists.addresses.length; j++)
+                    {
+                        let ea = exists.addresses[j];
+
+                        if (ba.cleanAddress === ea.cleanAddress)
+                        {
+                            addressExists = true;
+                            break;
+                        }
+                    }
+
+                    if (addressExists === false)
+                    {
+                        exists.addresses.push(ba);
+                    }
+                }
+
+                result = await buildingCollection.updateOne({"_id": exists._id}, {"$set": {"addresses": exists.addresses}});
+            }
+
+        }
+
+    }
+
+    return result;
+};
+
+
+
 const Run = async () =>
 {
     let mongoCreds = fs.readFileSync(process.env.REDI_CREDS_PATH + process.env.REDI_MONGODB_CREDS);
@@ -354,30 +367,41 @@ const Run = async () =>
 
     let padAddressCursor = await padAddressCollection.find
     ({
+        "bin": {$not: /^[1-5]000000$/}
+        //"_id": new MongoObjectId("65fe242048bdd6a583f7b412")
+        //"bin": "1007725"
         //"lhnd": {"$regex": "^([0-9]+)([a-zA-Z])$"}
         //"lhnd": {"$regex": "^([0-9]+)-([0-9]+)$"}
-    });
+    }, {"sort": {"bin": 1}});
 
-    let padAddressCount = 0;
-
+    let padCount = 0;
     let padPromises = [];
+    let pads = [];
+    let prevPad = null;
 
     while (1)
     {
-        let pa = await padAddressCursor.next();
+        let pad = await padAddressCursor.next();
 
-        if (pa === null)
+        if (pad === null)
         {
             break;
         }
 
-        padAddressCount = padAddressCount + 1;
-        console.log("Processed " + padAddressCount + " pad addresses");
+        if (prevPad && pad.bin !== prevPad.bin)
+        {
+            padPromises.push(CreateBuilding(pads));
+            pads = [];
+        }
 
-        padPromises.push(ProcessPadAddress(pa));
+        padCount = padCount + 1;
+        pads.push(pad);
+        prevPad = pad;
 
         if (padPromises.length >= 100)
         {
+            process.stdout.write("\rProcessed " + padCount + " pad addresses");
+
             try
             {
                 await Promise.allSettled(padPromises);
@@ -389,70 +413,11 @@ const Run = async () =>
                 console.error(e);
             }
         }
+    }
 
-        /*
-        let bbl = pa.boro + pa.block + pa.lot;
-        let scboro = pa.scboro;
-        let sc5 = pa.sc5;
-        let lowAddr = pa.lhnd + " " + pa.stname;
-
-        let houseNumbers = BuildHouseNumbers(pa.lhnd, pa.hhnd, pa.lcontpar);
-
-        if (houseNumbers === null || (houseNumbers.length && houseNumbers[0].length === 0))
-        {
-            //console.log(pa.lhnd + " and " + pa.hhnd + " with parity " + pa.lcontpar);
-        }
-
-        let sndCursor = await sndCollection.find({"boro": scboro, "sc5": sc5});
-        let snds = await sndCursor.toArray();
-
-        let building = 
-        {
-            "bin": pa.bin,
-            "boro": pa.boro,
-            "block": pa.block,
-            "lot": pa.lot,
-            "addresses": []
-        };
-
-        if (building.bin && building.bin.match(/^[1-5]000000$/))
-        {
-            continue;
-        }
-
-        for (let i = 0; i < snds.length; i++)
-        {
-            for (let j = 0; j < houseNumbers.length; j++)
-            {
-                let addr = houseNumbers[j] + " " + snds[i].fullstname;
-                addr = addr.replace(/\s+/g, " ").trim();
-
-                building.addresses.push({"address": addr, "sc5": sc5});
-            }
-
-            if (houseNumbers === null || houseNumbers.length === 0)
-            {
-                building.addresses.push({"address": snds[i].fullstname, "sc5": sc5});
-            }
-        }
-
-        buildingPromises.push(CreateBuilding(buildingCollection, building));
-
-        if (buildingPromises.length >= 100)
-        {
-            try
-            {
-                await Promise.allSettled(buildingPromises);
-                buildingPromises = [];
-                //await CreateBuilding(buildingCollection, building);
-            }
-
-            catch (e)
-            {
-                console.error(e);
-            }
-        }
-        */
+    if (pads.length)
+    {
+        padPromises.push(CreateBuilding(pads));
     }
 
     if (padPromises.length)
@@ -468,22 +433,6 @@ const Run = async () =>
             console.error(e);
         }
     }
-
-    /*
-    if (buildingPromises.length)
-    {
-        try
-        {
-            await Promise.allSettled(buildingPromises);
-            buildingPromises = [];
-        }
-
-        catch (e)
-        {
-            console.error(e);
-        }
-    }
-    */
 
     await mongoClient.close();
 };
