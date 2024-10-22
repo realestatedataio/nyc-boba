@@ -1,4 +1,4 @@
-import { default as RediNycBoba } from "../index.js";
+import { default as RediNycBoba } from "../../index.js";
 import minimist from "minimist";
 
 
@@ -6,7 +6,7 @@ import minimist from "minimist";
 const argv = minimist(process.argv.slice(2));
 
 
-const Run = async () =>
+const Run = async (): Promise<void> =>
 {
     let argDownloader = argv.hasOwnProperty("downloader") ? argv.downloader : null;
     argDownloader = argDownloader && argDownloader !== "" ? argDownloader : null;

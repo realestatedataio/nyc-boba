@@ -1,4 +1,4 @@
-import { default as RediNycBoba } from "../index.js";
+import { default as RediNycBoba } from "../../index.js";
 import { parse as FastCsvParse } from "@fast-csv/parse";
 import fs from "fs";
 import { MongoClient, ObjectId as MongoObjectId } from "mongodb";
@@ -9,7 +9,7 @@ import minimist from "minimist";
 const argv = minimist(process.argv.slice(2));
 
 
-const ProcessCsv = async (mapperName, file, collection, version) =>
+const ProcessCsv = async (mapperName: string, file: string, collection: any, version: string) =>
 {
     if (RediNycBoba.hasOwnProperty(mapperName) === false || !(RediNycBoba[mapperName]))
     {
@@ -64,7 +64,7 @@ const ProcessCsv = async (mapperName, file, collection, version) =>
     return new Promise(GeneratorFunc);
 };
 
-const Run = async () =>
+const Run = async (): Promise<void> =>
 {
     let argMapper = argv.hasOwnProperty("mapper") ? argv.mapper : null;
     argMapper = argMapper && argMapper !== "" ? argMapper : null;
@@ -111,7 +111,7 @@ const Run = async () =>
         return;
     }
 
-    let mongoCreds = fs.readFileSync(process.env.REDI_CREDS_PATH + process.env.REDI_MONGODB_CREDS);
+    let mongoCreds: any = fs.readFileSync(process.env.REDI_CREDS_PATH + process.env.REDI_MONGODB_CREDS);
     mongoCreds = JSON.parse(mongoCreds);
     
     const mongoClient = new MongoClient
@@ -120,7 +120,6 @@ const Run = async () =>
         {
             "authSource": mongoCreds.authSource,
             "auth": {"username": mongoCreds.user, "password": mongoCreds.password},
-            "useUnifiedTopology": true,
             "socketTimeoutMS": 500000
         }
     );

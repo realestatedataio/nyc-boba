@@ -10,6 +10,7 @@
     [
         "index.ts",
         "index.test.ts",
-        "packages/**/*.ts"
+        "packages/**/*.ts",
+        "bin/**/*.ts"
     ]
 }

@@ -1,4 +1,4 @@
-import { default as RediNycBoba } from "../index.js";
+import { default as RediNycBoba } from "../../index.js";
 import fs from "fs";
 import readline from "readline";
 import minimist from "minimist";
@@ -9,7 +9,7 @@ import { MongoClient, ObjectId as MongoObjectId } from "mongodb";
 const argv = minimist(process.argv.slice(2));
 
 
-const ProcessFile = async (file, sndCollection, sndFtCollection, version) =>
+const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: any, version: string): Promise<number> =>
 {
     const GeneratorFunc = (resolve, reject) =>
     {
@@ -112,7 +112,7 @@ const ProcessFile = async (file, sndCollection, sndFtCollection, version) =>
     return new Promise(GeneratorFunc);
 };
 
-const Run = async () =>
+const Run = async (): Promise<void> =>
 {
     const argDb = argv.db;
     const argSndCollection = argv.sndCollection;
@@ -126,7 +126,7 @@ const Run = async () =>
         return;
     }
 
-    let mongoCreds = fs.readFileSync(process.env.REDI_CREDS_PATH + process.env.REDI_MONGODB_CREDS);
+    let mongoCreds: any = fs.readFileSync(process.env.REDI_CREDS_PATH + process.env.REDI_MONGODB_CREDS);
     mongoCreds = JSON.parse(mongoCreds);
 
     const mongoClient = new MongoClient
@@ -135,7 +135,6 @@ const Run = async () =>
         {
             "authSource": mongoCreds.authSource,
             "auth": {"username": mongoCreds.user, "password": mongoCreds.password},
-            "useUnifiedTopology": true,
             "socketTimeoutMS": 400000
         }
     );

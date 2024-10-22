@@ -1,13 +1,13 @@
 import fs from "fs";
-import { default as RediNycBoba } from "../index.js";
+import { default as RediNycBoba } from "../../index.js";
 import { MongoClient, ObjectId as MongoObjectId } from "mongodb";
 import minimist from "minimist";
-import { default as Redi } from "realestatedata";
+import * as Redi from "@realestatedata/redi";
 
 
 const argv = minimist(process.argv.slice(2));
 
-const rediAddressParser = new Redi.AddressParser();
+const rediAddressParser = new Redi.AddressParser({});
 
 let padBblCollection = null;
 let padAddressCollection = null;
@@ -16,7 +16,7 @@ let sndFtCollection = null;
 let buildingCollection = null;
 
 
-const ProcessPadAddress = async (pad) =>
+const ProcessPadAddress = async (pad): Promise<any> =>
 {
     let bbl = pad.boro + pad.block + pad.lot;
     let scboro = pad.scboro;
@@ -82,7 +82,7 @@ const ProcessPadAddress = async (pad) =>
     return building;
 };
 
-const BuildNumericHouseNumbers = (low, high, parity, pattern) =>
+const BuildNumericHouseNumbers = (low: any, high: any, parity: any, pattern: any): Array<string> =>
 {
     let houseNumbers = [];
 
@@ -97,7 +97,7 @@ const BuildNumericHouseNumbers = (low, high, parity, pattern) =>
     return houseNumbers;
 };
 
-const BuildSingleLetterHouseNumbers = (low, high, parity, pattern) =>
+const BuildSingleLetterHouseNumbers = (low: any, high: any, parity: any, pattern: any): Array<string> =>
 {
     let houseNumbers = [];
 
@@ -128,7 +128,7 @@ const BuildSingleLetterHouseNumbers = (low, high, parity, pattern) =>
     return houseNumbers;
 };
 
-const BuildDashedHouseNumbers = (low, high, parity, pattern) =>
+const BuildDashedHouseNumbers = (low: any, high: any, parity: any, pattern: any): Array<string> =>
 {
     let houseNumbers = [];
 
@@ -153,7 +153,7 @@ const BuildDashedHouseNumbers = (low, high, parity, pattern) =>
     return houseNumbers;
 };
 
-const BuildDashedSingleLetterHouseNumbers = (low, high, parity, pattern) =>
+const BuildDashedSingleLetterHouseNumbers = (low: any, high: any, parity: any, pattern: any): Array<string> =>
 {
     let houseNumbers = [];
 
@@ -186,37 +186,37 @@ const BuildDashedSingleLetterHouseNumbers = (low, high, parity, pattern) =>
     return houseNumbers;
 };
 
-const BuildFrontHouseNumbers = (low, high, parity, pattern) =>
+const BuildFrontHouseNumbers = (low: any, high: any, parity: any, pattern: any): Array<string> =>
 {
     return null;
 };
 
-const BuildRearHouseNumbers = (low, high, parity, pattern) =>
+const BuildRearHouseNumbers = (low: any, high: any, parity: any, pattern: any): Array<string> =>
 {
     return null;
 };
 
-const BuildAirHouseNumbers = (low, high, parity, pattern) =>
+const BuildAirHouseNumbers = (low: any, high: any, parity: any, pattern: any): Array<string> =>
 {
     return null;
 };
 
-const BuildGarageHouseNumbers = (low, high, parity, pattern) =>
+const BuildGarageHouseNumbers = (low: any, high: any, parity: any, pattern: any): Array<string> =>
 {
     return null;
 };
 
-const BuildUndergroundHouseNumbers = (low, high, parity, pattern) =>
+const BuildUndergroundHouseNumbers = (low: any, high: any, parity: any, pattern: any): Array<string> =>
 {
     return null;
 };
 
-const BuildFractionHouseNumbers = (low, high, parity, pattern) =>
+const BuildFractionHouseNumbers = (low: any, high: any, parity: any, pattern: any): Array<string> =>
 {
     return null;
 };
 
-const BuildHouseNumbers = (low, high, parity) =>
+const BuildHouseNumbers = (low: string, high: string, parity: any): Array<string> =>
 {
     low = low.replace(/\s+/g, " ").trim();
     high = high.replace(/\s+/g, " ").trim();
@@ -267,7 +267,7 @@ const BuildHouseNumbers = (low, high, parity) =>
 };
 
 
-const CreateBuilding = async (pads) =>
+const CreateBuilding = async (pads: Array<any>): Promise<any> =>
 {
     let result = null;
     let exists = null;
@@ -339,9 +339,9 @@ const CreateBuilding = async (pads) =>
 
 
 
-const Run = async () =>
+const Run = async (): Promise<void> =>
 {
-    let mongoCreds = fs.readFileSync(process.env.REDI_CREDS_PATH + process.env.REDI_MONGODB_CREDS);
+    let mongoCreds: any = fs.readFileSync(process.env.REDI_CREDS_PATH + process.env.REDI_MONGODB_CREDS);
     mongoCreds = JSON.parse(mongoCreds);
 
     const mongoClient = new MongoClient
@@ -350,7 +350,6 @@ const Run = async () =>
         {
             "authSource": mongoCreds.authSource,
             "auth": {"username": mongoCreds.user, "password": mongoCreds.password},
-            "useUnifiedTopology": true,
             "socketTimeoutMS": 400000
         }
     );
