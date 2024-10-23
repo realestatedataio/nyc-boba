@@ -69,7 +69,7 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
                 console.error(e);
             }
 
-            if (insertPromises.length >= 500)
+            if (insertPromises.length >= 10000)
             {
                 console.log("PAUSING");
                 paused = true;
