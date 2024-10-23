@@ -61,7 +61,6 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
                 let s = await mapper.FromFile(line);
                 s = s.ToJson();
 
-                console.log("adding insert promise");
                 insertPromises.push(InsertOne(collection, s));
             }
 
@@ -72,6 +71,7 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
 
             if (insertPromises.length >= 500)
             {
+                console.log("PAUSING");
                 paused = true;
                 rl.pause();
             }
@@ -79,6 +79,8 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
 
         rl.on("pause", async () =>
         {
+            console.log("PAUSED");
+
             while (insertPromises.length)
             {
                 //let promises = insertPromises.splice(0, 50);
@@ -99,6 +101,11 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
         {
             console.log("RESUMED");
             paused = false;
+        });
+
+        rl.on("end", async () =>
+        {
+            console.log("END RECEIVED");
         });
 
         rl.on("close", async () => 

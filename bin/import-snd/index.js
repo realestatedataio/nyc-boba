@@ -37,18 +37,19 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
                 let collection = line[50] === "S" ? sndFtCollection : sndCollection;
                 let s = await mapper.FromFile(line);
                 s = s.ToJson();
-                console.log("adding insert promise");
                 insertPromises.push(InsertOne(collection, s));
             }
             catch (e) {
                 console.error(e);
             }
             if (insertPromises.length >= 500) {
+                console.log("PAUSING");
                 paused = true;
                 rl.pause();
             }
         });
         rl.on("pause", async () => {
+            console.log("PAUSED");
             while (insertPromises.length) {
                 //let promises = insertPromises.splice(0, 50);
                 //await Promise.allSettled(promises);
@@ -65,6 +66,9 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
         rl.on("resume", () => {
             console.log("RESUMED");
             paused = false;
+        });
+        rl.on("end", async () => {
+            console.log("END RECEIVED");
         });
         rl.on("close", async () => {
             console.log("");
