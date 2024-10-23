@@ -54,11 +54,11 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
             }
             if (insertPromises.length >= 1000) {
                 console.log("at " + insertPromises.length);
-                rl.pause();
+                rs.pause();
                 await Promise.allSettled(insertPromises);
                 processed = processed + insertPromises.length;
                 insertPromises = [];
-                rl.resume();
+                rs.resume();
             }
         });
         rl.on("pause", async () => {
