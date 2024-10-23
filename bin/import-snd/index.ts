@@ -9,7 +9,7 @@ import { MongoClient, ObjectId as MongoObjectId } from "mongodb";
 const argv = minimist(process.argv.slice(2));
 
 
-const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: any, version: string): Promise<number> =>
+const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: any): Promise<number> =>
 {
     const GeneratorFunc = (resolve, reject) =>
     {
@@ -45,7 +45,6 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
                 let collection = line[50] === "S" ? sndFtCollection : sndCollection;
 
                 let s = await mapper.FromFile(line);
-                s.version = version;
                 s = s.ToJson();
 
                 insertPromises.push(collection.insertOne(s));
@@ -114,17 +113,30 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
 
 const Run = async (): Promise<void> =>
 {
-    const argDb = argv.db;
-    const argSndCollection = argv.sndCollection;
-    const argSndFtCollection = argv.sndFtCollection;
-    const argFile = argv.file;
-    const argVersion = argv.version;
+    const reqArgs = 
+    [
+        "db",
+        "snd-collection",
+        "snd-ft-collection",
+        "file"
+    ];
 
-    if (argDb === undefined || argSndCollection === undefined || argSndFtCollection === undefined || argFile === undefined || argVersion === undefined)
+    for (let i = 0; i < reqArgs.length; i++)
     {
-        console.error("ERROR: Missing required argument(s)");
-        return;
+        let v = argv.hasOwnProperty(reqArgs[i]) ? argv[reqArgs[i]] : null;
+
+        if (v === null || v === undefined || v === "")
+        {
+            console.error("ERROR: Missing required argument(s)");
+            console.error("Syntax: node import-snd --db=<db> --snd-collection=<snd-collection> --snd-ft-collection=<snd-ft-collection> --file=<file>");
+            return;
+        }
     }
+
+    const argDb = argv["db"];
+    const argSndCollection = argv["snd-collection"];
+    const argSndFtCollection = argv["snd-ft-collection"];
+    const argFile = argv["file"];
 
     let mongoCreds: any = fs.readFileSync(process.env.REDI_CREDS_PATH + process.env.REDI_MONGODB_CREDS);
     mongoCreds = JSON.parse(mongoCreds);
@@ -167,7 +179,7 @@ const Run = async (): Promise<void> =>
 
     try
     {
-        let totalProcessed = await ProcessFile(argFile, sndCollection, sndFtCollection, argVersion);
+        let totalProcessed = await ProcessFile(argFile, sndCollection, sndFtCollection);
         console.log("Successfully processed " + totalProcessed + " entries");
     }
 

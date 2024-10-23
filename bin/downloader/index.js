@@ -3,7 +3,7 @@ import minimist from "minimist";
 import * as child_process from "child_process";
 import * as fs from "fs";
 const argv = minimist(process.argv.slice(2));
-const ProcessZipFile = async (file) => {
+const ProcessZipFile = async (file, type) => {
     try {
         let folder = file.split("/");
         folder = folder && folder.length ? folder[folder.length - 1] : null;
@@ -21,6 +21,7 @@ const ProcessZipFile = async (file) => {
             }
         }
         child_process.spawnSync("unzip", ["-q", file, "-d", folder]);
+        fs.writeFileSync(process.env.REDI_BROWSER_DOWNLOAD_DIR + "/nyc-boba-" + type + "-latest", folder);
     }
     catch (e) {
         console.error(e);
@@ -33,15 +34,16 @@ const Run = async () => {
         console.error("Missing arg \"downloader\" must be provided");
         return;
     }
-    if (RediNycBoba.hasOwnProperty(argDownloader) === false || !(RediNycBoba[argDownloader])) {
-        console.error("ERROR: Unknown downloader \"" + argDownloader + "\"");
+    let downloaderName = argDownloader.charAt(0).toUpperCase() + argDownloader.slice(1) + "Downloader";
+    if (RediNycBoba.hasOwnProperty(downloaderName) === false || !(RediNycBoba[downloaderName])) {
+        console.error("ERROR: Unknown downloader \"" + downloaderName + "\"");
         return;
     }
     let downloader = new RediNycBoba[argDownloader]();
     let file = await downloader.Run();
     console.log("Downloaded File: " + file);
     if (file.indexOf(".zip") !== -1) {
-        await ProcessZipFile(file);
+        await ProcessZipFile(file, argDownloader);
     }
 };
 Run();

@@ -8,7 +8,7 @@ import * as fs from "fs";
 const argv = minimist(process.argv.slice(2));
 
 
-const ProcessZipFile = async (file: string): Promise<void> =>
+const ProcessZipFile = async (file: string, type: string): Promise<void> =>
 {
     try
     {
@@ -36,6 +36,8 @@ const ProcessZipFile = async (file: string): Promise<void> =>
         }
 
         child_process.spawnSync("unzip", ["-q", file, "-d", folder]);
+
+        fs.writeFileSync(process.env.REDI_BROWSER_DOWNLOAD_DIR + "/nyc-boba-" + type + "-latest", folder);
     }
 
     catch (e)
@@ -55,9 +57,11 @@ const Run = async (): Promise<void> =>
         return;
     }
 
-    if (RediNycBoba.hasOwnProperty(argDownloader) === false || !(RediNycBoba[argDownloader]))
+    let downloaderName = argDownloader.charAt(0).toUpperCase() + argDownloader.slice(1) + "Downloader";
+
+    if (RediNycBoba.hasOwnProperty(downloaderName) === false || !(RediNycBoba[downloaderName]))
     {
-        console.error("ERROR: Unknown downloader \"" + argDownloader + "\"");
+        console.error("ERROR: Unknown downloader \"" + downloaderName + "\"");
         return;
     }
 
@@ -68,7 +72,7 @@ const Run = async (): Promise<void> =>
 
     if (file.indexOf(".zip") !== -1)
     {
-        await ProcessZipFile(file);
+        await ProcessZipFile(file, argDownloader);
     }
 };
 
