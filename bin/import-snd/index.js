@@ -81,7 +81,7 @@ const Run = async () => {
     for (let i = 0; i < reqArgs.length; i++) {
         let v = argv.hasOwnProperty(reqArgs[i]) ? argv[reqArgs[i]] : null;
         if (v === null || v === undefined || v === "") {
-            console.error("ERROR: Missing required argument(s)");
+            console.error("ERROR: Missing required argument \"" + reqArgs[i] + "\"");
             console.error("Syntax: node import-snd --db=<db> --snd-collection=<snd-collection> --snd-ft-collection=<snd-ft-collection> --file=<file>");
             return;
         }
