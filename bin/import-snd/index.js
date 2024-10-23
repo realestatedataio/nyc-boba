@@ -19,7 +19,6 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
         let count = 0;
         let processed = 0;
         let insertPromises = [];
-        let paused = false;
         const sndMapper = new RediNycBoba.SndMapper();
         const sndFtMapper = new RediNycBoba.SndFrontTruncatedMapper();
         const rs = fs.createReadStream(file);
@@ -43,29 +42,20 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
                 console.error(e);
             }
             if (insertPromises.length >= 10000) {
+                rl.pause();
+                await Promise.allSettled(insertPromises);
+                processed = processed + insertPromises.length;
+                insertPromises = [];
+                rl.resume();
+            }
+            if (insertPromises.length >= 10000) {
                 console.log("PAUSING");
-                paused = true;
                 rl.pause();
             }
         });
         rl.on("pause", async () => {
-            console.log("PAUSED");
-            while (insertPromises.length) {
-                //let promises = insertPromises.splice(0, 50);
-                //await Promise.allSettled(promises);
-                //processed = processed + promises.length;
-                await Promise.allSettled(insertPromises);
-                processed = processed + insertPromises.length;
-                insertPromises = [];
-                //process.stdout.write("\rTotal processed: " + processed);
-                console.log("Total Processed: " + processed);
-            }
-            console.log("UNPAUSING");
-            rl.resume();
         });
         rl.on("resume", () => {
-            console.log("RESUMED");
-            paused = false;
         });
         rl.on("end", async () => {
             console.log("END RECEIVED");
@@ -73,11 +63,6 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
         rl.on("close", async () => {
             console.log("");
             console.log("closed");
-            while (paused) {
-                console.log("paused in close");
-                await new Promise((resolve, reject) => { setTimeout(resolve, 1000); });
-            }
-            //await new Promise((resolve, reject) => { setTimeout(resolve, 10000); });
             await Promise.allSettled(insertPromises);
             processed = processed + insertPromises.length;
             insertPromises = [];
