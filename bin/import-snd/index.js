@@ -56,7 +56,6 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
                 rl.pause();
                 await Promise.allSettled(insertPromises);
                 processed = processed + insertPromises.length;
-                process.stdout.write("\rProcessed " + processed);
                 insertPromises = [];
                 rl.resume();
             }
@@ -69,7 +68,6 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
             console.log("END RECEIVED");
         });
         rl.on("close", async () => {
-            console.log("");
             console.log("closed");
             await Promise.allSettled(insertPromises);
             processed = processed + insertPromises.length;
