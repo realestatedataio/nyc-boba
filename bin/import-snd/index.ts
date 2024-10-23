@@ -13,6 +13,22 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
 {
     const GeneratorFunc = (resolve, reject) =>
     {
+        const InsertOne = async (collection, s) =>
+        {
+            try
+            {
+                await collection.insertOne(s);
+            }
+
+            catch (e)
+            {
+                if (e.code !== 11000)
+                {
+                    console.error(e);
+                }
+            }
+        };
+
         let count = 0;
         let processed = 0;
         let insertPromises = [];
@@ -47,7 +63,7 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
                 let s = await mapper.FromFile(line);
                 s = s.ToJson();
 
-                insertPromises.push(collection.insertOne(s));
+                insertPromises.push(InsertOne(collection, s));
             }
 
             catch (e)

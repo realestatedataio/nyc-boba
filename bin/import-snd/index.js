@@ -6,6 +6,16 @@ import { MongoClient } from "mongodb";
 const argv = minimist(process.argv.slice(2));
 const ProcessFile = async (file, sndCollection, sndFtCollection) => {
     const GeneratorFunc = (resolve, reject) => {
+        const InsertOne = async (collection, s) => {
+            try {
+                await collection.insertOne(s);
+            }
+            catch (e) {
+                if (e.code !== 11000) {
+                    console.error(e);
+                }
+            }
+        };
         let count = 0;
         let processed = 0;
         let insertPromises = [];
@@ -29,7 +39,7 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
                 let collection = line[50] === "S" ? sndFtCollection : sndCollection;
                 let s = await mapper.FromFile(line);
                 s = s.ToJson();
-                insertPromises.push(collection.insertOne(s));
+                insertPromises.push(InsertOne(collection, s));
             }
             catch (e) {
                 console.error(e);
