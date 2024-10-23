@@ -6,10 +6,10 @@ import { MongoClient } from "mongodb";
 const argv = minimist(process.argv.slice(2));
 const ProcessHeader = async (l) => {
     let id = l.substring(0, 8);
-    let dateCreated = l.substring(8, 6);
-    let version = l.substring(14, 4);
-    let numRecords = l.substring(18, 8);
-    let filler = l.substring(26, 174);
+    let dateCreated = l.substring(8, 14);
+    let version = l.substring(14, 18);
+    let numRecords = l.substring(18, 26);
+    let filler = l.substring(26, 200);
     return { "id": id, "dateCreated": dateCreated, "version": version, "numRecords": numRecords, "filler": filler };
 };
 const ProcessFile = async (file, sndCollection, sndFtCollection) => {
@@ -132,7 +132,6 @@ const Run = async () => {
         console.error("ERROR: Processing file failed due to incorrect processed vs. line count");
         console.error(e);
     }
-    console.log("closing mongo client");
     await mongoClient.close();
     console.log("Mongo client closed");
 };
