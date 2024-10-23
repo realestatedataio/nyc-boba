@@ -37,6 +37,7 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
                 let collection = line[50] === "S" ? sndFtCollection : sndCollection;
                 let s = await mapper.FromFile(line);
                 s = s.ToJson();
+                console.log("adding insert promise");
                 insertPromises.push(InsertOne(collection, s));
             }
             catch (e) {
@@ -49,9 +50,12 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
         });
         rl.on("pause", async () => {
             while (insertPromises.length) {
-                let promises = insertPromises.splice(0, 50);
-                await Promise.allSettled(promises);
-                processed = processed + promises.length;
+                //let promises = insertPromises.splice(0, 50);
+                //await Promise.allSettled(promises);
+                //processed = processed + promises.length;
+                await Promise.allSettled(insertPromises);
+                processed = processed + insertPromises.length;
+                insertPromises = [];
                 //process.stdout.write("\rTotal processed: " + processed);
                 console.log("Total Processed: " + processed);
             }
@@ -66,6 +70,7 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
             console.log("");
             console.log("closed");
             while (paused) {
+                console.log("paused in close");
                 await new Promise((resolve, reject) => { setTimeout(resolve, 1000); });
             }
             //await new Promise((resolve, reject) => { setTimeout(resolve, 10000); });
