@@ -102,7 +102,7 @@ const Run = async () => {
     let sndFtCollection = mongoClient.db(argDb).collection(argSndFtCollection);
     try {
         await sndCollection.createIndex({ "version": 1, "boro": 1, "sc5": 1, "lgc": 1, "spv": 1 }, { "name": "b10sc", "unique": true });
-        await sndCollection.createIndex({ "version": 1, "progenb10sc1": 1, "progenb10sc2": 1 }, { "name": "b10sc", "unique": true });
+        await sndFtCollection.createIndex({ "version": 1, "progenb10sc1": 1, "progenb10sc2": 1 }, { "name": "b10sc", "unique": true });
     }
     catch (e) {
         console.error("ERROR: Failed to create indexes.");

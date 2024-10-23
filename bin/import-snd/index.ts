@@ -164,7 +164,7 @@ const Run = async (): Promise<void> =>
             {"name": "b10sc", "unique": true}
         );
 
-        await sndCollection.createIndex
+        await sndFtCollection.createIndex
         (
             {"version": 1, "progenb10sc1": 1, "progenb10sc2": 1},
             {"name": "b10sc", "unique": true}
