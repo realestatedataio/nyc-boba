@@ -41,16 +41,13 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
             catch (e) {
                 console.error(e);
             }
-            if (insertPromises.length >= 10000) {
+            if (insertPromises.length >= 1000) {
                 rl.pause();
                 await Promise.allSettled(insertPromises);
                 processed = processed + insertPromises.length;
+                process.stdout.write("\rProcessed " + processed);
                 insertPromises = [];
                 rl.resume();
-            }
-            if (insertPromises.length >= 10000) {
-                console.log("PAUSING");
-                rl.pause();
             }
         });
         rl.on("pause", async () => {
