@@ -4,6 +4,14 @@ import readline from "readline";
 import minimist from "minimist";
 import { MongoClient } from "mongodb";
 const argv = minimist(process.argv.slice(2));
+const ProcessHeader = async (l) => {
+    let id = l.substring(0, 8);
+    let dateCreated = l.substring(8, 6);
+    let version = l.substring(14, 4);
+    let numRecords = l.substring(18, 8);
+    let filler = l.substring(26, 174);
+    return { "id": id, "dateCreated": dateCreated, "version": version, "numRecords": numRecords, "filler": filler };
+};
 const ProcessFile = async (file, sndCollection, sndFtCollection) => {
     const GeneratorFunc = (resolve, reject) => {
         const InsertOne = async (collection, s) => {
@@ -19,6 +27,7 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
         let count = 0;
         let processed = 0;
         let insertPromises = [];
+        let header = null;
         const sndMapper = new RediNycBoba.SndMapper();
         const sndFtMapper = new RediNycBoba.SndFrontTruncatedMapper();
         const rs = fs.createReadStream(file);
@@ -29,12 +38,14 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
         rl.on("line", async (line) => {
             count = count + 1;
             if (count === 1) {
+                header = await ProcessHeader(line);
                 return;
             }
             try {
                 let mapper = line[50] === "S" ? sndFtMapper : sndMapper;
                 let collection = line[50] === "S" ? sndFtCollection : sndCollection;
                 let s = await mapper.FromFile(line);
+                s.version = header.version;
                 s = s.ToJson();
                 insertPromises.push(InsertOne(collection, s));
             }

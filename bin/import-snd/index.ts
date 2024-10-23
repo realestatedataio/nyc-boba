@@ -9,6 +9,17 @@ import { MongoClient, ObjectId as MongoObjectId } from "mongodb";
 const argv = minimist(process.argv.slice(2));
 
 
+const ProcessHeader = async (l) =>
+{
+    let id = l.substring(0, 8);
+    let dateCreated = l.substring(8, 6);
+    let version = l.substring(14, 4);
+    let numRecords = l.substring(18, 8);
+    let filler = l.substring(26, 174);
+
+    return {"id": id, "dateCreated": dateCreated, "version": version, "numRecords": numRecords, "filler": filler};
+};
+
 const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: any): Promise<number> =>
 {
     const GeneratorFunc = (resolve, reject) =>
@@ -32,6 +43,7 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
         let count = 0;
         let processed = 0;
         let insertPromises = [];
+        let header = null;
 
         const sndMapper = new RediNycBoba.SndMapper();
         const sndFtMapper = new RediNycBoba.SndFrontTruncatedMapper();
@@ -49,6 +61,7 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
 
             if (count === 1)
             {
+                header = await ProcessHeader(line);
                 return;
             }
 
@@ -58,6 +71,7 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
                 let collection = line[50] === "S" ? sndFtCollection : sndCollection;
 
                 let s = await mapper.FromFile(line);
+                s.version = header.version;
                 s = s.ToJson();
 
                 insertPromises.push(InsertOne(collection, s));
