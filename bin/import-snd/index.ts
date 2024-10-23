@@ -86,11 +86,13 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
                 process.stdout.write("\rTotal processed: " + processed);
             }
 
+            console.log("UNPAUSING");
             rl.resume();
         });
 
         rl.on("resume", () =>
         {
+            console.log("RESUMED");
             paused = false;
         });
 
@@ -113,6 +115,8 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
 
             console.log("Total processed: " + processed);
             console.log("Total line count: " + count);
+
+            rs.close();
 
             if ((count - 1) !== processed)
             {

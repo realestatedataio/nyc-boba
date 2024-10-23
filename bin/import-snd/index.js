@@ -54,9 +54,11 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
                 processed = processed + promises.length;
                 process.stdout.write("\rTotal processed: " + processed);
             }
+            console.log("UNPAUSING");
             rl.resume();
         });
         rl.on("resume", () => {
+            console.log("RESUMED");
             paused = false;
         });
         rl.on("close", async () => {
@@ -71,6 +73,7 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
             insertPromises = [];
             console.log("Total processed: " + processed);
             console.log("Total line count: " + count);
+            rs.close();
             if ((count - 1) !== processed) {
                 reject();
             }
