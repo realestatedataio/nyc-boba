@@ -7,7 +7,7 @@ const argv = minimist(process.argv.slice(2));
 const ProcessHeader = async (l) => {
     let id = l.substring(0, 8);
     let dateCreated = l.substring(8, 14);
-    let version = l.substring(14, 18);
+    let version = l.substring(14, 18).toLowerCase();
     let numRecords = l.substring(18, 26);
     let filler = l.substring(26, 200);
     return { "id": id, "dateCreated": dateCreated, "version": version, "numRecords": numRecords, "filler": filler };
