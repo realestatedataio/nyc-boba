@@ -29,8 +29,6 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
         });
         rl.on("line", async (line) => {
             count = count + 1;
-            //console.log("Processed " + count);
-            //process.stdout.write("\rProcessed " + count);
             if (count === 1) {
                 return;
             }
@@ -62,10 +60,12 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
             paused = false;
         });
         rl.on("close", async () => {
+            console.log("");
             console.log("closed");
             while (paused) {
                 await new Promise((resolve, reject) => { setTimeout(resolve, 1000); });
             }
+            await new Promise((resolve, reject) => { setTimeout(resolve, 10000); });
             await Promise.allSettled(insertPromises);
             processed = processed + insertPromises.length;
             insertPromises = [];
@@ -126,6 +126,7 @@ const Run = async () => {
         console.error("ERROR: Processing file failed due to incorrect processed vs. line count");
         console.error(e);
     }
+    console.log("closing mongo client");
     await mongoClient.close();
     console.log("Mongo client closed");
 };

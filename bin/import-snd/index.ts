@@ -47,8 +47,6 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
         rl.on("line", async (line) =>
         {
             count = count + 1;
-            //console.log("Processed " + count);
-            //process.stdout.write("\rProcessed " + count);
 
             if (count === 1)
             {
@@ -98,12 +96,16 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
 
         rl.on("close", async () => 
         { 
+            console.log("");
             console.log("closed");
 
             while (paused)
             {
                 await new Promise((resolve, reject) => { setTimeout(resolve, 1000); });
             }
+
+            await new Promise((resolve, reject) => { setTimeout(resolve, 10000); });
+
 
             await Promise.allSettled(insertPromises);
             processed = processed + insertPromises.length;
@@ -205,6 +207,7 @@ const Run = async (): Promise<void> =>
         console.error(e);
     }
 
+    console.log("closing mongo client");
     await mongoClient.close();
     console.log("Mongo client closed");
 };
