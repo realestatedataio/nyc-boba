@@ -52,7 +52,8 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
                 let promises = insertPromises.splice(0, 50);
                 await Promise.allSettled(promises);
                 processed = processed + promises.length;
-                process.stdout.write("\rTotal processed: " + processed);
+                //process.stdout.write("\rTotal processed: " + processed);
+                console.log("Total Processed: " + processed);
             }
             console.log("UNPAUSING");
             rl.resume();
@@ -67,7 +68,7 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
             while (paused) {
                 await new Promise((resolve, reject) => { setTimeout(resolve, 1000); });
             }
-            await new Promise((resolve, reject) => { setTimeout(resolve, 10000); });
+            //await new Promise((resolve, reject) => { setTimeout(resolve, 10000); });
             await Promise.allSettled(insertPromises);
             processed = processed + insertPromises.length;
             insertPromises = [];
