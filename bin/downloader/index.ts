@@ -65,7 +65,7 @@ const Run = async (): Promise<void> =>
         return;
     }
 
-    let downloader = new RediNycBoba[argDownloader]();
+    let downloader = new RediNycBoba[downloaderName]();
     let file = await downloader.Run();
 
     console.log("Downloaded File: " + file);

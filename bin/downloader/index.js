@@ -39,7 +39,7 @@ const Run = async () => {
         console.error("ERROR: Unknown downloader \"" + downloaderName + "\"");
         return;
     }
-    let downloader = new RediNycBoba[argDownloader]();
+    let downloader = new RediNycBoba[downloaderName]();
     let file = await downloader.Run();
     console.log("Downloaded File: " + file);
     if (file.indexOf(".zip") !== -1) {
