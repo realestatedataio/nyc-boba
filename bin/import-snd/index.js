@@ -66,6 +66,7 @@ const ProcessFile = async (file, sndCollection, sndFtCollection) => {
         });
         rl.on("end", async () => {
             console.log("END RECEIVED");
+            await Promise.allSettled(insertPromises);
         });
         rl.on("close", async () => {
             console.log("closed");

@@ -103,6 +103,7 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
         rl.on("end", async () =>
         {
             console.log("END RECEIVED");
+            await Promise.allSettled(insertPromises);
         });
 
         rl.on("close", async () => 
