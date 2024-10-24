@@ -9,7 +9,7 @@ import minimist from "minimist";
 const argv = minimist(process.argv.slice(2));
 
 
-const GetVersionFromFile = async (file: string): Promise<string> =>
+const GetVersionFromFile = (file: string): Promise<string> =>
 {
     let folder: any = file.split("/");
     folder = folder && folder.length > 1 ? folder[folder.length - 2] : null;
@@ -34,12 +34,31 @@ const ProcessCsv = async (mapperName: string, file: string, collection: any) =>
 
     const mapper = new RediNycBoba[mapperName]();
 
+    const InsertOne = async (collection, s) =>
+    {
+        try
+        {
+            await collection.insertOne(s);
+        }
+
+        catch (e)
+        {
+            if (e.code !== 11000)
+            {
+                console.error(e);
+            }
+        }
+    };
+
     const GeneratorFunc = (resolve, reject) =>
     {
         let rs = fs.createReadStream(file);
         let ws = FastCsvParse({"headers": true});
 
         let count = 0;
+        let processed = 0;
+        let insertPromises = [];
+        let version = GetVersionFromFile(file);
 
         ws.on("data", async (row) =>
         {
@@ -48,28 +67,39 @@ const ProcessCsv = async (mapperName: string, file: string, collection: any) =>
             count = count + 1;
             process.stdout.write("\rProcessed " + count);
 
-            let r = await mapper.FromCsv(row);            
-            r.version = await GetVersionFromFile(file);
-            r = r.ToJson();
-
             try
             {
-                await collection.insertOne(r);
+                let r = await mapper.FromCsv(row);            
+                r.version = version;
+                r = r.ToJson();
+
+                insertPromises.push(InsertOne(collection, r));
             }
 
             catch (e)
             {
-                console.log("FAILED TO INSERT");
-                console.log(e);
+                console.error(e);
             }
 
-            ws.resume();
+            if (insertPromises.length >= 1000)
+            {
+                rs.pause();
+                let promises = insertPromises.splice(0, 1000);
+                await Promise.allSettled(promises);
+                processed = processed + promises.length;
+                rs.resume();
+            }
         });
 
-        ws.on("end", () => 
+        ws.on("end", async () => 
         {
             console.log(""); 
             console.log("CLOSING STREAM"); 
+
+            await Promise.allSettled(insertPromises);
+            processed = processed + insertPromises.length;
+
+            rs.close();
             resolve(); 
         });
 

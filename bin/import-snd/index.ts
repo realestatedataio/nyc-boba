@@ -86,7 +86,7 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
             {
                 rs.pause();
                 let promises = insertPromises.splice(0, 1000);
-                await Promise.allSettled(insertPromises);
+                await Promise.allSettled(promises);
                 processed = processed + promises.length;
                 rs.resume();
             }
