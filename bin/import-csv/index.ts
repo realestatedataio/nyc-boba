@@ -62,10 +62,7 @@ const ProcessCsv = async (mapperName: string, file: string, collection: any) =>
 
         ws.on("data", async (row) =>
         {
-            ws.pause();
-
             count = count + 1;
-            process.stdout.write("\rProcessed " + count);
 
             try
             {
@@ -87,6 +84,7 @@ const ProcessCsv = async (mapperName: string, file: string, collection: any) =>
                 let promises = insertPromises.splice(0, 1000);
                 await Promise.allSettled(promises);
                 processed = processed + promises.length;
+                console.log("Processed " + processed);
                 rs.resume();
             }
         });
