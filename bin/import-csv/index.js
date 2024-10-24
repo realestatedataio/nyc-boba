@@ -61,6 +61,7 @@ const ProcessCsv = async (mapperName, file, collection) => {
             console.log("CLOSING STREAM");
             await Promise.allSettled(insertPromises);
             processed = processed + insertPromises.length;
+            console.log("Processed " + processed);
             rs.close();
             resolve();
         });

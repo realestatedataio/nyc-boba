@@ -96,6 +96,7 @@ const ProcessCsv = async (mapperName: string, file: string, collection: any) =>
 
             await Promise.allSettled(insertPromises);
             processed = processed + insertPromises.length;
+            console.log("Processed " + processed);
 
             rs.close();
             resolve(); 
