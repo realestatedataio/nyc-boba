@@ -4,7 +4,16 @@ import fs from "fs";
 import { MongoClient } from "mongodb";
 import minimist from "minimist";
 const argv = minimist(process.argv.slice(2));
-const ProcessCsv = async (mapperName, file, collection, version) => {
+const GetVersionFromFile = async (file) => {
+    let folder = file.split("/");
+    folder = folder && folder.length > 1 ? folder[folder.length - 2] : null;
+    if (folder === null || folder === undefined || folder === "") {
+        return null;
+    }
+    folder = folder.split("_");
+    return folder && folder.length > 1 ? folder[1].toLowerCase().trim() : null;
+};
+const ProcessCsv = async (mapperName, file, collection) => {
     if (RediNycBoba.hasOwnProperty(mapperName) === false || !(RediNycBoba[mapperName])) {
         console.error("ERROR: Unrecognized mapper \"" + mapperName + "\"");
         return;
@@ -19,7 +28,7 @@ const ProcessCsv = async (mapperName, file, collection, version) => {
             count = count + 1;
             process.stdout.write("\rProcessed " + count);
             let r = await mapper.FromCsv(row);
-            r.version = version;
+            r.version = await GetVersionFromFile(file);
             r = r.ToJson();
             try {
                 await collection.insertOne(r);
@@ -40,36 +49,24 @@ const ProcessCsv = async (mapperName, file, collection, version) => {
     return new Promise(GeneratorFunc);
 };
 const Run = async () => {
-    let argMapper = argv.hasOwnProperty("mapper") ? argv.mapper : null;
-    argMapper = argMapper && argMapper !== "" ? argMapper : null;
-    let argDb = argv.hasOwnProperty("db") ? argv.db : null;
-    argDb = argDb && argDb !== "" ? argDb : null;
-    let argCollection = argv.hasOwnProperty("collection") ? argv.collection : null;
-    argCollection = argCollection && argCollection !== "" ? argCollection : null;
-    let argVersion = argv.hasOwnProperty("version") ? argv.version : null;
-    argVersion = argVersion && argVersion !== "" ? argVersion : null;
-    let argFile = argv.hasOwnProperty("file") ? argv.file : null;
-    argFile = argFile && argFile !== "" ? argFile : null;
-    if (argMapper === null) {
-        console.log("Required argument \"mapper\" missing");
-        return;
+    const reqArgs = [
+        "db",
+        "mapper",
+        "collection",
+        "file"
+    ];
+    for (let i = 0; i < reqArgs.length; i++) {
+        let v = argv.hasOwnProperty(reqArgs[i]) ? argv[reqArgs[i]] : null;
+        if (v === null || v === undefined || v === "") {
+            console.error("Missing required argument \"" + reqArgs[i] + "\"");
+            console.error("Syntax: node import-csv --db=<db> --mapper=<mapper> --collection=<collection> --file=<file>");
+            return;
+        }
     }
-    if (argDb === null) {
-        console.log("Required argument \"db\" missing");
-        return;
-    }
-    if (argCollection === null) {
-        console.log("Required argument \"collection\" missing");
-        return;
-    }
-    if (argVersion === null) {
-        console.log("Required argument \"version\" missing");
-        return;
-    }
-    if (argFile === null) {
-        console.log("Required argument \"file\" missing");
-        return;
-    }
+    const argDb = argv["db"];
+    const argMapper = argv["mapper"];
+    const argCollection = argv["collection"];
+    const argFile = argv["file"];
     let mongoCreds = fs.readFileSync(process.env.REDI_CREDS_PATH + process.env.REDI_MONGODB_CREDS);
     mongoCreds = JSON.parse(mongoCreds);
     const mongoClient = new MongoClient("mongodb://" + process.env.REDI_MONGODB_URL, {
@@ -78,8 +75,9 @@ const Run = async () => {
         "socketTimeoutMS": 500000
     });
     await mongoClient.connect();
+    let mapperName = argMapper + "Mapper";
     let collection = mongoClient.db(argDb).collection(argCollection);
-    await ProcessCsv(argMapper, argFile, collection, argVersion);
+    await ProcessCsv(mapperName, argFile, collection);
     console.log("DONE");
     await mongoClient.close();
 };
