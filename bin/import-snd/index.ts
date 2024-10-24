@@ -9,14 +9,41 @@ import { MongoClient, ObjectId as MongoObjectId } from "mongodb";
 const argv = minimist(process.argv.slice(2));
 
 
-const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: any, version: string): Promise<number> =>
+const ProcessHeader = async (l) =>
+{
+    let id = l.substring(0, 8);
+    let dateCreated = l.substring(8, 14);
+    let version = l.substring(14, 18).toLowerCase();
+    let numRecords = l.substring(18, 26);
+    let filler = l.substring(26, 200);
+
+    return {"id": id, "dateCreated": dateCreated, "version": version, "numRecords": numRecords, "filler": filler};
+};
+
+const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: any): Promise<number> =>
 {
     const GeneratorFunc = (resolve, reject) =>
     {
+        const InsertOne = async (collection, s) =>
+        {
+            try
+            {
+                await collection.insertOne(s);
+            }
+
+            catch (e)
+            {
+                if (e.code !== 11000)
+                {
+                    console.error(e);
+                }
+            }
+        };
+
         let count = 0;
         let processed = 0;
         let insertPromises = [];
-        let paused = false;
+        let header = null;
 
         const sndMapper = new RediNycBoba.SndMapper();
         const sndFtMapper = new RediNycBoba.SndFrontTruncatedMapper();
@@ -31,11 +58,10 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
         rl.on("line", async (line) =>
         {
             count = count + 1;
-            //console.log("Processed " + count);
-            //process.stdout.write("\rProcessed " + count);
 
             if (count === 1)
             {
+                header = await ProcessHeader(line);
                 return;
             }
 
@@ -45,10 +71,10 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
                 let collection = line[50] === "S" ? sndFtCollection : sndCollection;
 
                 let s = await mapper.FromFile(line);
-                s.version = version;
+                s.version = header.version;
                 s = s.ToJson();
 
-                insertPromises.push(collection.insertOne(s));
+                insertPromises.push(InsertOne(collection, s));
             }
 
             catch (e)
@@ -56,39 +82,33 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
                 console.error(e);
             }
 
-            if (insertPromises.length >= 500)
+            if (insertPromises.length >= 1000)
             {
-                paused = true;
-                rl.pause();
+                rs.pause();
+                let promises = insertPromises.splice(0, 1000);
+                await Promise.allSettled(insertPromises);
+                processed = processed + promises.length;
+                rs.resume();
             }
         });
 
         rl.on("pause", async () =>
         {
-            while (insertPromises.length)
-            {
-                let promises = insertPromises.splice(0, 50);
-                await Promise.allSettled(promises);
-                processed = processed + promises.length;
-                process.stdout.write("\rTotal processed: " + processed);
-            }
-
-            rl.resume();
         });
 
         rl.on("resume", () =>
         {
-            paused = false;
+        });
+
+        rl.on("end", async () =>
+        {
+            console.log("END RECEIVED");
+            await Promise.allSettled(insertPromises);
         });
 
         rl.on("close", async () => 
         { 
             console.log("closed");
-
-            while (paused)
-            {
-                await new Promise((resolve, reject) => { setTimeout(resolve, 1000); });
-            }
 
             await Promise.allSettled(insertPromises);
             processed = processed + insertPromises.length;
@@ -96,6 +116,8 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
 
             console.log("Total processed: " + processed);
             console.log("Total line count: " + count);
+
+            rs.close();
 
             if ((count - 1) !== processed)
             {
@@ -114,17 +136,30 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
 
 const Run = async (): Promise<void> =>
 {
-    const argDb = argv.db;
-    const argSndCollection = argv.sndCollection;
-    const argSndFtCollection = argv.sndFtCollection;
-    const argFile = argv.file;
-    const argVersion = argv.version;
+    const reqArgs = 
+    [
+        "db",
+        "snd-collection",
+        "snd-ft-collection",
+        "file"
+    ];
 
-    if (argDb === undefined || argSndCollection === undefined || argSndFtCollection === undefined || argFile === undefined || argVersion === undefined)
+    for (let i = 0; i < reqArgs.length; i++)
     {
-        console.error("ERROR: Missing required argument(s)");
-        return;
+        let v = argv.hasOwnProperty(reqArgs[i]) ? argv[reqArgs[i]] : null;
+
+        if (v === null || v === undefined || v === "")
+        {
+            console.error("ERROR: Missing required argument \"" + reqArgs[i] + "\"");
+            console.error("Syntax: node import-snd --db=<db> --snd-collection=<snd-collection> --snd-ft-collection=<snd-ft-collection> --file=<file>");
+            return;
+        }
     }
+
+    const argDb = argv["db"];
+    const argSndCollection = argv["snd-collection"];
+    const argSndFtCollection = argv["snd-ft-collection"];
+    const argFile = argv["file"];
 
     let mongoCreds: any = fs.readFileSync(process.env.REDI_CREDS_PATH + process.env.REDI_MONGODB_CREDS);
     mongoCreds = JSON.parse(mongoCreds);
@@ -146,7 +181,28 @@ const Run = async (): Promise<void> =>
 
     try
     {
-        let totalProcessed = await ProcessFile(argFile, sndCollection, sndFtCollection, argVersion);
+        await sndCollection.createIndex
+        (
+            {"version": 1, "boro": 1, "sc5": 1, "lgc": 1, "spv": 1},
+            {"name": "b10sc", "unique": true}
+        );
+
+        await sndFtCollection.createIndex
+        (
+            {"version": 1, "progenb10sc1": 1, "progenb10sc2": 1},
+            {"name": "b10sc", "unique": true}
+        );
+    }
+
+    catch (e)
+    {
+        console.error("ERROR: Failed to create indexes.");
+        console.error(e);
+    }
+
+    try
+    {
+        let totalProcessed = await ProcessFile(argFile, sndCollection, sndFtCollection);
         console.log("Successfully processed " + totalProcessed + " entries");
     }
 
