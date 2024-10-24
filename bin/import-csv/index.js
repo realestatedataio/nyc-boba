@@ -52,16 +52,14 @@ const ProcessCsv = async (mapperName, file, collection) => {
                 let promises = insertPromises.splice(0, 1000);
                 await Promise.allSettled(promises);
                 processed = processed + promises.length;
-                console.log("Processed " + processed);
+                process.stdout.write("Processed " + processed);
                 rs.resume();
             }
         });
         ws.on("end", async () => {
-            console.log("");
-            console.log("CLOSING STREAM");
             await Promise.allSettled(insertPromises);
             processed = processed + insertPromises.length;
-            console.log("Processed " + processed);
+            console.log("\rProcessed " + processed);
             rs.close();
             resolve();
         });
