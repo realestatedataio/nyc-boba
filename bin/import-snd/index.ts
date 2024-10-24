@@ -84,8 +84,8 @@ const ProcessFile = async (file: string, sndCollection: any, sndFtCollection: an
 
             if (insertPromises.length >= 1000)
             {
-                console.log("at " + insertPromises.length);
                 rs.pause();
+                console.log("num insert promises: " + insertPromises.length);
                 await Promise.allSettled(insertPromises);
                 processed = processed + insertPromises.length;
                 insertPromises = [];
