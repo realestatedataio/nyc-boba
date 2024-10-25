@@ -9,7 +9,22 @@ import minimist from "minimist";
 const argv = minimist(process.argv.slice(2));
 
 
-const ProcessCsv = async (mapperName: string, file: string, collection: any, version: string) =>
+const GetVersionFromFile = (file: string): Promise<string> =>
+{
+    let folder: any = file.split("/");
+    folder = folder && folder.length > 1 ? folder[folder.length - 2] : null;
+
+    if (folder === null || folder === undefined || folder === "")
+    {
+        return null;
+    }
+
+    folder = folder.split("_");
+
+    return folder && folder.length > 1 ? folder[1].toLowerCase().trim() : null;
+};
+
+const ProcessCsv = async (mapperName: string, file: string, collection: any) =>
 {
     if (RediNycBoba.hasOwnProperty(mapperName) === false || !(RediNycBoba[mapperName]))
     {
@@ -19,42 +34,68 @@ const ProcessCsv = async (mapperName: string, file: string, collection: any, ver
 
     const mapper = new RediNycBoba[mapperName]();
 
+    const InsertOne = async (collection, s) =>
+    {
+        try
+        {
+            await collection.insertOne(s);
+        }
+
+        catch (e)
+        {
+            if (e.code !== 11000)
+            {
+                console.error(e);
+            }
+        }
+    };
+
     const GeneratorFunc = (resolve, reject) =>
     {
         let rs = fs.createReadStream(file);
         let ws = FastCsvParse({"headers": true});
 
         let count = 0;
+        let processed = 0;
+        let insertPromises = [];
+        let version = GetVersionFromFile(file);
 
         ws.on("data", async (row) =>
         {
-            ws.pause();
-
             count = count + 1;
-            process.stdout.write("\rProcessed " + count);
-
-            let r = await mapper.FromCsv(row);            
-            r.version = version;
-            r = r.ToJson();
 
             try
             {
-                await collection.insertOne(r);
+                let r = await mapper.FromCsv(row);            
+                r.version = version;
+                r = r.ToJson();
+
+                insertPromises.push(InsertOne(collection, r));
             }
 
             catch (e)
             {
-                console.log("FAILED TO INSERT");
-                console.log(e);
+                console.error(e);
             }
 
-            ws.resume();
+            if (insertPromises.length >= 1000)
+            {
+                rs.pause();
+                let promises = insertPromises.splice(0, 1000);
+                await Promise.allSettled(promises);
+                processed = processed + promises.length;
+                process.stdout.write("\rProcessed " + processed);
+                rs.resume();
+            }
         });
 
-        ws.on("end", () => 
+        ws.on("end", async () => 
         {
-            console.log(""); 
-            console.log("CLOSING STREAM"); 
+            await Promise.allSettled(insertPromises);
+            processed = processed + insertPromises.length;
+            console.log("\rProcessed " + processed);
+
+            rs.close();
             resolve(); 
         });
 
@@ -66,50 +107,30 @@ const ProcessCsv = async (mapperName: string, file: string, collection: any, ver
 
 const Run = async (): Promise<void> =>
 {
-    let argMapper = argv.hasOwnProperty("mapper") ? argv.mapper : null;
-    argMapper = argMapper && argMapper !== "" ? argMapper : null;
+    const reqArgs = 
+    [
+        "db",
+        "mapper",
+        "collection",
+        "file"
+    ];
 
-    let argDb = argv.hasOwnProperty("db") ? argv.db : null;
-    argDb = argDb && argDb !== "" ? argDb : null;
-
-    let argCollection = argv.hasOwnProperty("collection") ? argv.collection : null;
-    argCollection = argCollection && argCollection !== "" ? argCollection : null;
-
-    let argVersion = argv.hasOwnProperty("version") ? argv.version : null;
-    argVersion = argVersion && argVersion !== "" ? argVersion : null;
-
-    let argFile = argv.hasOwnProperty("file") ? argv.file : null;
-    argFile = argFile && argFile !== "" ? argFile : null;
-
-    if (argMapper === null)
+    for (let i = 0; i < reqArgs.length; i++)
     {
-        console.log("Required argument \"mapper\" missing");
-        return;
+        let v = argv.hasOwnProperty(reqArgs[i]) ? argv[reqArgs[i]] : null;
+
+        if (v === null || v === undefined || v === "")
+        {
+            console.error("Missing required argument \"" + reqArgs[i] + "\"");
+            console.error("Syntax: node import-csv --db=<db> --mapper=<mapper> --collection=<collection> --file=<file>");
+            return;
+        }
     }
 
-    if (argDb === null)
-    {
-        console.log("Required argument \"db\" missing");
-        return;
-    }
-
-    if (argCollection === null)
-    {
-        console.log("Required argument \"collection\" missing");
-        return;
-    }
-
-    if (argVersion === null)
-    {
-        console.log("Required argument \"version\" missing");
-        return;
-    }
-
-    if (argFile === null)
-    {
-        console.log("Required argument \"file\" missing");
-        return;
-    }
+    const argDb = argv["db"];
+    const argMapper = argv["mapper"];
+    const argCollection = argv["collection"];
+    const argFile = argv["file"];
 
     let mongoCreds: any = fs.readFileSync(process.env.REDI_CREDS_PATH + process.env.REDI_MONGODB_CREDS);
     mongoCreds = JSON.parse(mongoCreds);
@@ -126,9 +147,35 @@ const Run = async (): Promise<void> =>
 
     await mongoClient.connect();
 
+    let mapperName = argMapper + "Mapper";
     let collection = mongoClient.db(argDb).collection(argCollection);
 
-    await ProcessCsv(argMapper, argFile, collection, argVersion);
+    try
+    {
+        if (mapperName === "PadAddressMapper")
+        {
+            await collection.createIndex
+            (
+                {"version": 1, "boro": 1, "block": 1, "lot": 1, "bin": 1, "lhnd": 1, "b10sc": 1},
+                {"name": "duplicate", "unique": true}
+            );
+        }
+
+        else if (mapperName === "PadBblMapper")
+        {
+            await collection.createIndex
+            (
+                {"version": 1, "loboro": 1, "loblock": 1, "lolot": 1},
+                {"name": "duplicate", "unique": true}
+            );
+        }
+    }
+
+    catch (e)
+    {
+    }
+
+    await ProcessCsv(mapperName, argFile, collection);
 
     console.log("DONE");
     await mongoClient.close();
