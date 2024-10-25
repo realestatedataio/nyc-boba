@@ -150,6 +150,31 @@ const Run = async (): Promise<void> =>
     let mapperName = argMapper + "Mapper";
     let collection = mongoClient.db(argDb).collection(argCollection);
 
+    try
+    {
+        if (mapperName === "PadAddressMapper")
+        {
+            await collection.createIndex
+            (
+                {"version": 1, "boro": 1, "block": 1, "lot": 1, "bin": 1, "lhnd": 1, "b10sc": 1},
+                {"name": "duplicate", "unique": true}
+            );
+        }
+
+        else if (mapperName === "PadBblMapper")
+        {
+            await collection.createIndex
+            (
+                {"version": 1, "loboro": 1, "loblock": 1, "lolot": 1},
+                {"name": "duplicate", "unique": true}
+            );
+        }
+    }
+
+    catch (e)
+    {
+    }
+
     await ProcessCsv(mapperName, argFile, collection);
 
     console.log("DONE");
