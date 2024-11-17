@@ -7,6 +7,7 @@ import minimist from "minimist";
 
 
 const argv = minimist(process.argv.slice(2));
+const argMatch = argv.hasOwnProperty("match") ? true : false;
 
 
 const GetVersionFromFile = (file: string): Promise<string> =>
@@ -50,8 +51,55 @@ const ProcessCsv = async (mapperName: string, file: string, collection: any) =>
         }
     };
 
+    const FindMatchedFile = (file: string): string =>
+    {
+        let folder = file.split("/");
+        let fileName = folder.pop();
+
+        if (fileName)
+        {
+            let dir = fs.opendirSync(folder.join("/"));
+            let matchedFile = null;
+
+            while (1)
+            {
+                let dirent = dir.readSync();
+
+                if (dirent === null)
+                {
+                    break;
+                }
+
+                if (dirent.isFile() === false)
+                {
+                    continue;
+                }
+
+                if (dirent.name.match(fileName))
+                {
+                    matchedFile = dirent.name;
+                    break
+                }
+            }
+            
+            if (matchedFile)
+            {
+                folder.push(matchedFile);
+                file = folder.join("/");
+            }
+        }
+
+        return file;
+    };
+
     const GeneratorFunc = (resolve, reject) =>
     {
+        if (argMatch)
+        {
+            file = FindMatchedFile(file);
+            console.log("Found " + file);
+        }
+
         let rs = fs.createReadStream(file);
         let ws = FastCsvParse({"headers": true});
 
