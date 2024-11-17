@@ -49,6 +49,7 @@ const ProcessCsv = async (mapperName, file, collection) => {
                     break;
                 }
             }
+            dir.closeSync();
             if (matchedFile) {
                 folder.push(matchedFile);
                 file = folder.join("/");

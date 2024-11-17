@@ -81,6 +81,8 @@ const ProcessCsv = async (mapperName: string, file: string, collection: any) =>
                     break
                 }
             }
+
+            dir.closeSync();
             
             if (matchedFile)
             {
