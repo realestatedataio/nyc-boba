@@ -96,6 +96,7 @@ const ProcessCsv = async (mapperName: string, file: string, collection: any) =>
     {
         if (argMatch)
         {
+            console.log("Looking for matched file");
             file = FindMatchedFile(file);
             console.log("Found " + file);
         }
