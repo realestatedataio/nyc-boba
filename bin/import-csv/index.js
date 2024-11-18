@@ -4,6 +4,7 @@ import fs from "fs";
 import { MongoClient } from "mongodb";
 import minimist from "minimist";
 const argv = minimist(process.argv.slice(2));
+const argMatch = argv.hasOwnProperty("match") ? true : false;
 const GetVersionFromFile = (file) => {
     let folder = file.split("/");
     folder = folder && folder.length > 1 ? folder[folder.length - 2] : null;
@@ -11,7 +12,19 @@ const GetVersionFromFile = (file) => {
         return null;
     }
     folder = folder.split("_");
-    return folder && folder.length > 1 ? folder[1].toLowerCase().trim() : null;
+    if (folder.length === 2) {
+        return folder[1].toLowerCase().trim();
+    }
+    else if (folder[0].toLowerCase().trim() === "nyc") {
+        if (folder[folder.length - 1].toLowerCase().trim() === "csv") {
+            let version = [];
+            for (let i = 2; i < folder.length - 1; i++) {
+                version.push(folder[i]);
+            }
+            return version.join("_").toLowerCase().trim();
+        }
+    }
+    return null;
 };
 const ProcessCsv = async (mapperName, file, collection) => {
     if (RediNycBoba.hasOwnProperty(mapperName) === false || !(RediNycBoba[mapperName])) {
@@ -29,7 +42,39 @@ const ProcessCsv = async (mapperName, file, collection) => {
             }
         }
     };
+    const FindMatchedFile = (file) => {
+        let folder = file.split("/");
+        let fileName = folder.pop();
+        if (fileName) {
+            let dir = fs.opendirSync(folder.join("/"));
+            let matchedFile = null;
+            while (1) {
+                let dirent = dir.readSync();
+                if (dirent === null) {
+                    break;
+                }
+                if (dirent.isFile() === false) {
+                    continue;
+                }
+                if (dirent.name.match(fileName)) {
+                    matchedFile = dirent.name;
+                    break;
+                }
+            }
+            dir.closeSync();
+            if (matchedFile) {
+                folder.push(matchedFile);
+                file = folder.join("/");
+            }
+        }
+        return file;
+    };
     const GeneratorFunc = (resolve, reject) => {
+        if (argMatch) {
+            console.log("Looking for matched file");
+            file = FindMatchedFile(file);
+            console.log("Found " + file);
+        }
         let rs = fs.createReadStream(file);
         let ws = FastCsvParse({ "headers": true });
         let count = 0;
