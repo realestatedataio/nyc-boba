@@ -12,7 +12,19 @@ const GetVersionFromFile = (file) => {
         return null;
     }
     folder = folder.split("_");
-    return folder && folder.length > 1 ? folder[1].toLowerCase().trim() : null;
+    if (folder.length === 2) {
+        return folder[1].toLowerCase().trim();
+    }
+    else if (folder[0].toLowerCase().trim() === "nyc") {
+        if (folder[folder.length - 1].toLowerCase().trim() === "csv") {
+            let version = [];
+            for (let i = 2; i < folder.length - 1; i++) {
+                version.push(folder[i]);
+            }
+            return version.join("_").toLowerCase().trim();
+        }
+    }
+    return null;
 };
 const ProcessCsv = async (mapperName, file, collection) => {
     if (RediNycBoba.hasOwnProperty(mapperName) === false || !(RediNycBoba[mapperName])) {
