@@ -45,16 +45,8 @@ const GetVersionFromFile = (file: string): string =>
     return null;
 };
 
-const ProcessCsv = async (mapperName: string, file: string, collection: any) =>
+const ProcessCsv = async (mapper: any, file: string, collection: any) =>
 {
-    if (RediNycBoba.hasOwnProperty(mapperName) === false || !(RediNycBoba[mapperName]))
-    {
-        console.error("ERROR: Unrecognized mapper \"" + mapperName + "\"");
-        return;
-    }
-
-    const mapper = new RediNycBoba[mapperName]();
-
     const InsertOne = async (collection, s) =>
     {
         try
@@ -218,35 +210,19 @@ const Run = async (): Promise<void> =>
 
     await mongoClient.connect();
 
-    let mapperName = argMapper + "Mapper";
     let collection = mongoClient.db(argDb).collection(argCollection);
+    let mapperName = argMapper + "Mapper";
 
-    try
+    if (RediNycBoba.hasOwnProperty(mapperName) === false || !(RediNycBoba[mapperName]))
     {
-        if (mapperName === "PadAddressMapper")
-        {
-            await collection.createIndex
-            (
-                {"version": 1, "boro": 1, "block": 1, "lot": 1, "bin": 1, "lhnd": 1, "b10sc": 1},
-                {"name": "duplicate", "unique": true}
-            );
-        }
-
-        else if (mapperName === "PadBblMapper")
-        {
-            await collection.createIndex
-            (
-                {"version": 1, "loboro": 1, "loblock": 1, "lolot": 1},
-                {"name": "duplicate", "unique": true}
-            );
-        }
+        console.error("ERROR: Unrecognized mapper \"" + mapperName + "\"");
+        return;
     }
 
-    catch (e)
-    {
-    }
+    let mapper = new RediNycBoba[mapperName]();
+    await mapper.CreateIndexes(collection);
 
-    await ProcessCsv(mapperName, argFile, collection);
+    await ProcessCsv(mapper, argFile, collection);
 
     console.log("DONE");
     await mongoClient.close();
