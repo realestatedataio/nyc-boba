@@ -1,6 +1,16 @@
 import { PadAddress, PadBbl } from "../../model/pad/index.js";
-class PadAddressMapper {
+import { Mapper } from "../index.js";
+class PadAddressMapper extends Mapper {
     constructor() {
+        super();
+    }
+    ;
+    async CreateIndexes(collection) {
+        try {
+            await collection.createIndex({ "version": 1, "boro": 1, "block": 1, "lot": 1, "bin": 1, "lhnd": 1, "b10sc": 1 }, { "name": "duplicate", "unique": true });
+        }
+        catch (e) {
+        }
     }
     ;
     async FromCsv(d) {
@@ -57,8 +67,17 @@ class PadAddressMapper {
     ;
 }
 ;
-class PadBblMapper {
+class PadBblMapper extends Mapper {
     constructor() {
+        super();
+    }
+    ;
+    async CreateIndexes(collection) {
+        try {
+            await collection.createIndex({ "version": 1, "loboro": 1, "loblock": 1, "lolot": 1 }, { "name": "duplicate", "unique": true });
+        }
+        catch (e) {
+        }
     }
     ;
     async FromCsv(d) {

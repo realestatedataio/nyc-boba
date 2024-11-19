@@ -1,6 +1,16 @@
 import { Pluto } from "../../model/pluto/index.js";
-class PlutoMapper {
+import { Mapper } from "../index.js";
+class PlutoMapper extends Mapper {
     constructor() {
+        super();
+    }
+    ;
+    async CreateIndexes(collection) {
+        try {
+            await collection.createIndex({ "version": 1, "borough": 1, "block": 1, "lot": 1 }, { "name": "duplicate", "unique": true });
+        }
+        catch (e) {
+        }
     }
     ;
     async FromCsv(d) {
@@ -78,7 +88,7 @@ class PlutoMapper {
         p.commfar = d.hasOwnProperty("commfar") && d.commfar ? parseFloat(d.commfar) : null;
         p.facilfar = d.hasOwnProperty("facilfar") && d.facilfar ? parseFloat(d.facilfar) : null;
         p.borocode = d.hasOwnProperty("borocode") && d.borocode ? d.borocode : null;
-        p.bbl = d.hasOwnProperty("bbl") && d.bbl ? d.bbl : null;
+        p.bbl = d.hasOwnProperty("bbl") && d.bbl ? d.bbl.toString().split(".")[0] : null;
         p.condono = d.hasOwnProperty("condono") && d.condono ? d.condono : null;
         p.tract2010 = d.hasOwnProperty("tract2010") && d.tract2010 ? d.tract2010 : null;
         p.xcoord = d.hasOwnProperty("xcoord") && d.xcoord ? parseInt(d.xcoord) : null;
