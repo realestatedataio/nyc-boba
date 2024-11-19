@@ -7,8 +7,8 @@ class PlutoMapper {
         let p = new Pluto();
         p.version = d.hasOwnProperty("version") && d.version ? d.version : null;
         p.borough = d.hasOwnProperty("borough") && d.borough ? d.borough : null;
-        p.block = d.hasOwnProperty("block") && d.block ? d.block : null;
-        p.lot = d.hasOwnProperty("lot") && d.lot ? d.lot : null;
+        p.block = d.hasOwnProperty("block") && d.block ? d.block.padStart(5, "0") : null;
+        p.lot = d.hasOwnProperty("lot") && d.lot ? d.lot.padStart(4, "0") : null;
         p.cd = d.hasOwnProperty("cd") && d.cd ? d.cd : null;
         p.bct2020 = d.hasOwnProperty("bct2020") && d.bct2020 ? d.bct2020 : null;
         p.bctcb2020 = d.hasOwnProperty("bctcb2020") && d.bctcb2020 ? d.bctcb2020 : null;
